@@ -237,7 +237,7 @@
 
     <label>Championnat</label>
     <div class="custom-select" id="customChampionnat">
-      <div class="custom-select-selected" id="selectedLabel" onclick="toggleDropdown()">
+      <div class="custom-select-selected" id="selectedLabel">
         <span id="selectedText">-- Choisir un championnat --</span>
         <span class="arrow">&#9660;</span>
       </div>
@@ -310,7 +310,7 @@
     <label>&#128172; Remarques ou pr&#233;cisions <span style="font-weight:normal;color:#aaa;">(facultatif)</span></label>
     <textarea id="remarques" placeholder="Ex : d&#233;placement d&#233;j&#224; pr&#233;vu quoiqu'il arrive, int&#233;r&#234;t pour d'autres matchs du m&#234;me week-end, pr&#233;f&#233;rence tribune lat&#233;rale ou derri&#232;re le but..."></textarea>
 
-    <button id="btnValider" onclick="valider()" disabled>Envoyer ma demande &#127915;</button>
+    <button id="btnValider" onclick="valider()" disabled>Envoyer ma demande</button>
 
     <div id="confirmation"></div>
     <div id="erreur"></div>
@@ -337,6 +337,8 @@
       'Bundesliga': 'https://flagcdn.com/24x18/de.png'
     };
 
+    var dropdownOpen = false;
+
     function callScript(action, params) {
       return fetch(SCRIPT_URL, {
         method: 'POST',
@@ -352,42 +354,48 @@
         const div = document.createElement('div');
         div.className = 'custom-select-option';
         div.innerHTML = (flagUrl ? '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;flex-shrink:0;">' : '') + '<span class="name">' + c + '</span>';
-        div.onclick = function() {
+        div.addEventListener('mousedown', function(e) {
+          e.preventDefault();
           selectChampionnat(c, (flagUrl ? '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:8px;">' : '') + c);
-        };
+        });
         options.appendChild(div);
       });
 
       const divAutre = document.createElement('div');
       divAutre.className = 'custom-select-option';
       divAutre.innerHTML = '<span style="width:24px;text-align:center;">&#127942;</span><span class="name">Autre championnat ou coupe</span>';
-      divAutre.onclick = function() {
+      divAutre.addEventListener('mousedown', function(e) {
+        e.preventDefault();
         selectChampionnat('Autre', '&#127942; Autre championnat ou coupe');
-      };
+      });
       options.appendChild(divAutre);
 
     }).catch(function(err) {
       console.log('Erreur : ' + err);
     });
 
-    function toggleDropdown() {
+    document.getElementById('selectedLabel').addEventListener('mousedown', function(e) {
+      e.stopPropagation();
       const opts = document.getElementById('customOptions');
-      opts.style.display = opts.style.display === 'none' ? 'block' : 'none';
-    }
+      dropdownOpen = !dropdownOpen;
+      opts.style.display = dropdownOpen ? 'block' : 'none';
+    });
+
+    document.addEventListener('mousedown', function(e) {
+      const container = document.getElementById('customChampionnat');
+      if (!container.contains(e.target)) {
+        document.getElementById('customOptions').style.display = 'none';
+        dropdownOpen = false;
+      }
+    });
 
     function selectChampionnat(value, label) {
       document.getElementById('championnat').value = value;
       document.getElementById('selectedText').innerHTML = label;
       document.getElementById('customOptions').style.display = 'none';
+      dropdownOpen = false;
       loadJournees();
     }
-
-    document.addEventListener('click', function(e) {
-      const container = document.getElementById('customChampionnat');
-      if (!container.contains(e.target)) {
-        document.getElementById('customOptions').style.display = 'none';
-      }
-    });
 
     function loadJournees() {
       const champ = document.getElementById('championnat').value;
@@ -568,12 +576,12 @@
           + '&#9917; ' + matchLabel + '<br>'
           + '&#127915; ' + nb + ' place(s)' + (coteCote !== 'N/A' ? ' &#8212; C&#244;te &#224; c&#244;te : ' + coteCote : '') + '<br>'
           + '&#128248; ' + insta;
-        btn.textContent = 'Envoyer ma demande &#127915;';
+        btn.textContent = 'Envoyer ma demande';
         btn.disabled = false;
       }).catch(function() {
         err.style.display = 'block';
         err.innerHTML = '&#10060; Erreur lors de l\'envoi. R&#233;essaie.';
-        btn.textContent = 'Envoyer ma demande &#127915;';
+        btn.textContent = 'Envoyer ma demande';
         btn.disabled = false;
       });
     }
