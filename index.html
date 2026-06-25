@@ -190,6 +190,7 @@
       color: #888;
       font-size: 12px;
       margin-left: 8px;
+      flex-shrink: 0;
     }
     .custom-select-options {
       position: absolute;
@@ -215,11 +216,6 @@
     .custom-select-option:hover {
       background: #f5f5f5;
     }
-    .custom-select-option .flag {
-      font-size: 20px;
-      width: 28px;
-      text-align: center;
-    }
     .custom-select-option .name {
       flex: 1;
     }
@@ -230,7 +226,7 @@
 
     <img src="https://lh3.googleusercontent.com/a/ACg8ocJ2hyWT-Cpq-XEg-oIX9msJIimG3dPKIvHyIYa7hZZb9P5cUGg=s360-c-no" alt="Au Coeur des Tribunes" class="logo">
 
-    <h2>&#127915; Ma demande de billet</h2>
+    <h2>Ma demande de billet</h2>
     <p class="subtitle">
       <strong>Au C&#339;ur des Tribunes vous souhaite la bienvenue !</strong><br><br>
       Vous avez un match en t&#234;te, un match de r&#234;ve ou envie de vivre une parent&#232;se football lors de votre prochain voyage ? On a peut-&#234;tre ce qu'il vous faut !<br><br>
@@ -242,7 +238,7 @@
     <label>Championnat</label>
     <div class="custom-select" id="customChampionnat">
       <div class="custom-select-selected" id="selectedLabel" onclick="toggleDropdown()">
-        <span>-- Choisir un championnat --</span>
+        <span id="selectedText">-- Choisir un championnat --</span>
         <span class="arrow">&#9660;</span>
       </div>
       <div class="custom-select-options" id="customOptions" style="display:none;"></div>
@@ -329,16 +325,16 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwj0b-JwR6alLIroJVynVzggfXs-5vA9E1IwdJPMo7eIZMSWI7L9E1Qaf4zMyXtvyJb/exec';
 
     const MESSAGES_CLUBS = {
-      'Manchester United': '\uD83D\uDCF1 Bon &#224; savoir : pour ce match, le transfert de billets n&#233;cessite un appareil Android. Merci de le pr&#233;ciser si cela pose un probl&#232;me.',
-      'Chelsea': '\uD83C\uDFAB Bon &#224; savoir : le transfert de billets pour Chelsea s\'effectue via un Forward Membership, moyennant 15&#163; sur le site officiel du club.'
+      'Manchester United': '&#128241; Bon &#224; savoir : pour ce match, le transfert de billets n&#233;cessite un appareil Android. Merci de le pr&#233;ciser si cela pose un probl&#232;me.',
+      'Chelsea': '&#127915; Bon &#224; savoir : le transfert de billets pour Chelsea s\'effectue via un Forward Membership, moyennant 15&#163; sur le site officiel du club.'
     };
 
     const CHAMPIONNATS_FLAGS = {
-    'Premier League': 'https://flagcdn.com/24x18/gb-eng.png',
-    'Ligue 1': 'https://flagcdn.com/24x18/fr.png',
-    'Liga': 'https://flagcdn.com/24x18/es.png',
-    'Serie A': 'https://flagcdn.com/24x18/it.png',
-    'Bundesliga': 'https://flagcdn.com/24x18/de.png'
+      'Premier League': 'https://flagcdn.com/24x18/gb-eng.png',
+      'Ligue 1': 'https://flagcdn.com/24x18/fr.png',
+      'Liga': 'https://flagcdn.com/24x18/es.png',
+      'Serie A': 'https://flagcdn.com/24x18/it.png',
+      'Bundesliga': 'https://flagcdn.com/24x18/de.png'
     };
 
     function callScript(action, params) {
@@ -349,33 +345,25 @@
     }
 
     callScript('getChampionnats').then(function(championnats) {
-    const options = document.getElementById('customOptions');
+      const options = document.getElementById('customOptions');
 
-    championnats.forEach(function(c) {
-      const flagUrl = CHAMPIONNATS_FLAGS[c];
-      const div = document.createElement('div');
-      div.className = 'custom-select-option';
-      div.innerHTML = '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;"> <span class="name">' + c + '</span>';
-      div.onclick = function() {
-        selectChampionnat(c, '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:8px;"> ' + c);
-      };
-      options.appendChild(div);
-    });
-
-    const divAutre = document.createElement('div');
-    divAutre.className = 'custom-select-option';
-    divAutre.innerHTML = '<span style="width:24px;text-align:center;">&#127942;</span> <span class="name">Autre championnat ou coupe</span>';
-    divAutre.onclick = function() { selectChampionnat('Autre', '&#127942; Autre championnat ou coupe'); };
-    options.appendChild(divAutre);
-
-  }).catch(function(err) {
-  console.log('Erreur : ' + err);
-});
+      championnats.forEach(function(c) {
+        const flagUrl = CHAMPIONNATS_FLAGS[c] || '';
+        const div = document.createElement('div');
+        div.className = 'custom-select-option';
+        div.innerHTML = (flagUrl ? '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;flex-shrink:0;">' : '') + '<span class="name">' + c + '</span>';
+        div.onclick = function() {
+          selectChampionnat(c, (flagUrl ? '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:8px;">' : '') + c);
+        };
+        options.appendChild(div);
+      });
 
       const divAutre = document.createElement('div');
       divAutre.className = 'custom-select-option';
-      divAutre.innerHTML = '<span class="flag">\uD83C\uDFC6</span><span class="name">Autre championnat ou coupe</span>';
-      divAutre.onclick = function() { selectChampionnat('Autre', '\uD83C\uDFC6  Autre championnat ou coupe'); };
+      divAutre.innerHTML = '<span style="width:24px;text-align:center;">&#127942;</span><span class="name">Autre championnat ou coupe</span>';
+      divAutre.onclick = function() {
+        selectChampionnat('Autre', '&#127942; Autre championnat ou coupe');
+      };
       options.appendChild(divAutre);
 
     }).catch(function(err) {
@@ -389,7 +377,7 @@
 
     function selectChampionnat(value, label) {
       document.getElementById('championnat').value = value;
-      document.getElementById('selectedLabel').innerHTML = '<span>' + label + '</span><span class="arrow">&#9660;</span>';
+      document.getElementById('selectedText').innerHTML = label;
       document.getElementById('customOptions').style.display = 'none';
       loadJournees();
     }
@@ -430,7 +418,7 @@
       if (!champ) return;
 
       callScript('getJournees', { championnat: champ }).then(function(journees) {
-        selJ.innerHTML = '<option value="">-- Choisir une journ&#233;e --</option>';
+        selJ.innerHTML = '<option value="">-- Choisir une journ\u00e9e --</option>';
         journees.forEach(function(j) {
           const opt = document.createElement('option');
           opt.value = j;
@@ -575,17 +563,17 @@
         }
       }).then(function() {
         conf.style.display = 'block';
-        conf.innerHTML = '\u2705 Ta demande a bien \u00e9t\u00e9 re\u00e7ue !\u003Cbr\u003E\u003Cbr\u003E'
-          + '\u003Cstrong\u003E' + champ + ' \u2014 ' + journeeLabel + '\u003C/strong\u003E\u003Cbr\u003E'
-          + '\u26BD ' + matchLabel + '\u003Cbr\u003E'
-          + '\uD83C\uDFAB ' + nb + ' place(s)' + (coteCote !== 'N/A' ? ' \u2014 C\u00f4te \u00e0 c\u00f4te : ' + coteCote : '') + '\u003Cbr\u003E'
-          + '\uD83D\uDCF8 ' + insta;
-        btn.textContent = 'Envoyer ma demande \uD83C\uDFAB';
+        conf.innerHTML = '&#9989; Ta demande a bien &#233;t&#233; re&#231;ue !<br><br>'
+          + '<strong>' + champ + ' &#8212; ' + journeeLabel + '</strong><br>'
+          + '&#9917; ' + matchLabel + '<br>'
+          + '&#127915; ' + nb + ' place(s)' + (coteCote !== 'N/A' ? ' &#8212; C&#244;te &#224; c&#244;te : ' + coteCote : '') + '<br>'
+          + '&#128248; ' + insta;
+        btn.textContent = 'Envoyer ma demande &#127915;';
         btn.disabled = false;
       }).catch(function() {
         err.style.display = 'block';
-        err.innerHTML = '\u274C Erreur lors de l\'envoi. R\u00e9essaie.';
-        btn.textContent = 'Envoyer ma demande \uD83C\uDFAB';
+        err.innerHTML = '&#10060; Erreur lors de l\'envoi. R&#233;essaie.';
+        btn.textContent = 'Envoyer ma demande &#127915;';
         btn.disabled = false;
       });
     }
