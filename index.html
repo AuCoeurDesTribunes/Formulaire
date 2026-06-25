@@ -244,6 +244,7 @@
       <div class="custom-select-options" id="customOptions" style="display:none;"></div>
     </div>
     <input type="hidden" id="championnat">
+    <input type="hidden" id="dateMatch">
 
     <div id="champAutre">
       <div class="champ-autre-grid">
@@ -256,8 +257,8 @@
           <input type="text" id="autreExterieur" placeholder="Ex : Barcelone" oninput="checkForm()">
         </div>
       </div>
-      <label>&#128197; Date </label>
-      <input type="text" id="autreDate" placeholder="Ex : 19/09/2026" oninput="checkForm()">
+      <label>&#128197; Date souhait&#233;e</label>
+      <input type="text" id="autreDate" placeholder="Ex : 15/03/2025" oninput="checkForm()">
     </div>
 
     <div id="sectionJournee">
@@ -308,7 +309,7 @@
     <input type="text" id="instagram" placeholder="@tonpseudo" oninput="checkForm()">
 
     <label>&#128172; Remarques ou pr&#233;cisions <span style="font-weight:normal;color:#aaa;">(facultatif)</span></label>
-    <textarea id="remarques" placeholder="Ex : d&#233;placement d&#233;j&#224; pr&#233;vu, int&#233;r&#234;t pour d'autres matchs le m&#234;me week-end, tribune vis&#233;e..."></textarea>
+    <textarea id="remarques" placeholder="Ex : d&#233;placement d&#233;j&#224; pr&#233;vu quoiqu'il arrive, int&#233;r&#234;t pour d'autres matchs du m&#234;me week-end, pr&#233;f&#233;rence tribune lat&#233;rale ou derri&#232;re le but..."></textarea>
 
     <button id="btnValider" onclick="valider()" disabled>Envoyer ma demande</button>
 
@@ -448,6 +449,7 @@
 
       infoClub.style.display = 'none';
       infoClub.innerHTML = '';
+      document.getElementById('dateMatch').value = '';
       selM.innerHTML = '<option value="">Chargement...</option>';
       selM.disabled = true;
       checkForm();
@@ -460,6 +462,7 @@
           matchs.forEach(function(m) {
             const opt = document.createElement('option');
             opt.value = m.domicile + ' vs ' + m.exterieur;
+            opt.dataset.date = m.dateISO || '';
             const dateStr = m.date ? ' \u2014 ' + new Date(m.date).toLocaleDateString('fr-FR') : '';
             opt.textContent = m.domicile + ' vs ' + m.exterieur + dateStr;
             selM.appendChild(opt);
@@ -475,8 +478,12 @@
     }
 
     function onMatchChange() {
-      const match = document.getElementById('match').value;
+      const matchSel = document.getElementById('match');
+      const match = matchSel.value;
       const infoClub = document.getElementById('infoClub');
+
+      const selectedOpt = matchSel.options[matchSel.selectedIndex];
+      document.getElementById('dateMatch').value = selectedOpt ? (selectedOpt.dataset.date || '') : '';
 
       if (match) {
         const domicile = match.split(' vs ')[0].trim();
@@ -524,6 +531,7 @@
       const nb = document.getElementById('nbPlaces').value;
       const insta = document.getElementById('instagram').value.trim();
       const remarques = document.getElementById('remarques').value.trim();
+      const dateMatch = document.getElementById('dateMatch').value;
       const btn = document.getElementById('btnValider');
       const conf = document.getElementById('confirmation');
       const err = document.getElementById('erreur');
@@ -540,9 +548,9 @@
       if (champ === 'Autre') {
         domicile = document.getElementById('autreDomicile').value.trim();
         exterieur = document.getElementById('autreExterieur').value.trim();
-        const dateMatch = document.getElementById('autreDate').value.trim();
+        const dateAutre = document.getElementById('autreDate').value.trim();
         matchLabel = domicile + ' vs ' + exterieur;
-        journeeLabel = dateMatch;
+        journeeLabel = dateAutre;
       } else {
         const journee = document.getElementById('journee').value;
         const numJournee = journee.toString().replace(/\D/g, '');
@@ -564,14 +572,16 @@
           match: matchLabel,
           domicile: domicile,
           exterieur: exterieur,
+          dateMatch: dateMatch,
           nbPlaces: nb,
           coteCote: coteCote,
           instagram: insta,
           remarques: remarques
         }
-      }).then(function() {
+      }).then(function(id) {
         conf.style.display = 'block';
-        conf.innerHTML = '&#9989; Ta demande a bien &#233;t&#233; re&#231;ue !<br><br>'
+        conf.innerHTML = '&#9989; Ta demande a bien &#233;t&#233; re&#231;ue !<br>'
+          + '<small style="color:#888;">R&#233;f&#233;rence : <strong>' + id + '</strong></small><br><br>'
           + '<strong>' + champ + ' &#8212; ' + journeeLabel + '</strong><br>'
           + '&#9917; ' + matchLabel + '<br>'
           + '&#127915; ' + nb + ' place(s)' + (coteCote !== 'N/A' ? ' &#8212; C&#244;te &#224; c&#244;te : ' + coteCote : '') + '<br>'
