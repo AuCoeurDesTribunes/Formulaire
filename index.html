@@ -258,7 +258,7 @@
         </div>
       </div>
       <label>&#128197; Date souhait&#233;e</label>
-      <input type="text" id="autreDate" placeholder="JJ/MM/AAAA" maxlength="10" oninput="formatDate(this);checkForm()">
+      <input type="text" id="autreDate" placeholder="JJ/MM/AAAA" maxlength="10" oninput="formatDate(this); checkForm()">
     </div>
 
     <div id="sectionJournee">
@@ -309,7 +309,7 @@
     <input type="text" id="instagram" placeholder="@tonpseudo" oninput="checkForm()">
 
     <label>&#128172; Remarques ou pr&#233;cisions <span style="font-weight:normal;color:#aaa;">(facultatif)</span></label>
-    <textarea id="remarques" placeholder="Ex : d&#233;placement d&#233;j&#224; pr&#233;vu, int&#233;r&#234;t pour d'autres matchs du m&#234;me week-end, tribune visée..."></textarea>
+    <textarea id="remarques" placeholder="Ex : d&#233;placement d&#233;j&#224; pr&#233;vu quoiqu'il arrive, int&#233;r&#234;t pour d'autres matchs du m&#234;me week-end, pr&#233;f&#233;rence tribune lat&#233;rale ou derri&#232;re le but..."></textarea>
 
     <button id="btnValider" onclick="valider()" disabled>Envoyer ma demande</button>
 
@@ -333,7 +333,7 @@
     const CHAMPIONNATS_FLAGS = {
       'Premier League': 'https://flagcdn.com/24x18/gb-eng.png',
       'Ligue 1': 'https://flagcdn.com/24x18/fr.png',
-      'LaLiga': 'https://flagcdn.com/24x18/es.png',
+      'Liga': 'https://flagcdn.com/24x18/es.png',
       'Serie A': 'https://flagcdn.com/24x18/it.png',
       'Bundesliga': 'https://flagcdn.com/24x18/de.png'
     };
@@ -396,6 +396,13 @@
       document.getElementById('customOptions').style.display = 'none';
       dropdownOpen = false;
       loadJournees();
+    }
+
+    function formatDate(input) {
+      let v = input.value.replace(/\D/g, '');
+      if (v.length >= 3 && v.length <= 4) v = v.slice(0,2) + '/' + v.slice(2);
+      else if (v.length > 4) v = v.slice(0,2) + '/' + v.slice(2,4) + '/' + v.slice(4,8);
+      input.value = v;
     }
 
     function loadJournees() {
@@ -500,14 +507,7 @@
       }
       checkForm();
     }
-    
-  function formatDate(input) {
-    let v = input.value.replace(/\D/g,'');
-    if (V.length>=3 && v.length 4) v = v.slice(0,2) + '/' + v.slice(2);
-    else if (v.length > 4) v = v.slice(0,2) +'/' + v.slice(2,4) + '/' +v.slice(4,8);
-    input.value = v;
-  }
-    
+
     function checkCoteCote() {
       const nb = document.getElementById('nbPlaces').value;
       const div = document.getElementById('coteCoteDiv');
@@ -524,6 +524,7 @@
       if (champ === 'Autre') {
         const dom = document.getElementById('autreDomicile').value.trim();
         const ext = document.getElementById('autreExterieur').value.trim();
+        const date = document.getElementById('autreDate').value.trim();
         const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
         matchOk = !!(dom && ext && date && dateRegex.test(date));
       } else {
@@ -531,6 +532,30 @@
       }
 
       document.getElementById('btnValider').disabled = !(matchOk && nb && insta);
+    }
+
+    function nouvelleDemandeande() {
+      document.getElementById('confirmation').style.display = 'none';
+      document.getElementById('selectedText').innerHTML = '-- Choisir un championnat --';
+      document.getElementById('championnat').value = '';
+      document.getElementById('dateMatch').value = '';
+      document.getElementById('sectionJournee').style.display = 'block';
+      document.getElementById('champAutre').style.display = 'none';
+      document.getElementById('journee').innerHTML = '<option value="">-- Choisir une journ\u00e9e --</option>';
+      document.getElementById('journee').disabled = true;
+      document.getElementById('match').innerHTML = '<option value="">-- Choisir un match --</option>';
+      document.getElementById('match').disabled = true;
+      document.getElementById('infoClub').style.display = 'none';
+      document.getElementById('nbPlaces').value = '';
+      document.getElementById('coteCoteDiv').style.display = 'none';
+      document.getElementById('instagram').value = '';
+      document.getElementById('remarques').value = '';
+      document.getElementById('autreDomicile').value = '';
+      document.getElementById('autreExterieur').value = '';
+      document.getElementById('autreDate').value = '';
+      document.getElementById('btnValider').disabled = true;
+      document.getElementById('erreur').style.display = 'none';
+      window.scrollTo(0, 0);
     }
 
     function valider() {
@@ -588,12 +613,12 @@
       }).then(function(id) {
         conf.style.display = 'block';
         conf.innerHTML = '&#9989; Ta demande a bien &#233;t&#233; re&#231;ue !<br>'
-        + '<small style="color:#888;">R&#233;f&#233;rence : <strong>' + id + '</strong></small><br><br>'
-        + '<strong>' + champ + ' &#8212; ' + journeeLabel + '</strong><br>'
-        + '&#9917; ' + matchLabel + '<br>'
-        + '&#127915; ' + nb + ' place(s)' + (coteCote !== 'N/A' ? ' &#8212; C&#244;te &#224; c&#244;te : ' + coteCote : '') + '<br>'
-        + '&#128248; ' + insta + '<br><br>'
-        + '<button onclick="nouvelleDemandeande()" style="background:#1565C0;color:white;border:none;padding:10px 20px;border-radius:6px;font-size:14px;cursor:pointer;width:auto;">&#43; Effectuer une autre demande</button>';
+          + '<small style="color:#888;">R&#233;f&#233;rence : <strong>' + id + '</strong></small><br><br>'
+          + '<strong>' + champ + ' &#8212; ' + journeeLabel + '</strong><br>'
+          + '&#9917; ' + matchLabel + '<br>'
+          + '&#127915; ' + nb + ' place(s)' + (coteCote !== 'N/A' ? ' &#8212; C&#244;te &#224; c&#244;te : ' + coteCote : '') + '<br>'
+          + '&#128248; ' + insta + '<br><br>'
+          + '<button onmousedown="nouvelleDemandeande()" style="background:#1565C0;color:white;border:none;padding:10px 20px;border-radius:6px;font-size:14px;cursor:pointer;width:auto;">&#43; Effectuer une autre demande</button>';
         btn.textContent = 'Envoyer ma demande';
         btn.disabled = false;
       }).catch(function() {
@@ -603,27 +628,6 @@
         btn.disabled = false;
       });
     }
-    
-    function nouvelleDemandeande() {
-      document.getElementById('confirmation').style.display = 'none';
-      document.getElementById('selectedText').innerHTML = '-- Choisir un championnat --';
-      document.getElementById('championnat').value = '';
-      document.getElementById('dateMatch').value = '';
-      document.getElementById('sectionJournee').style.display = 'block';
-      document.getElementById('champAutre').style.display = 'none';
-      document.getElementById('journee').innerHTML = '<option value="">-- Choisir une journ\u00e9e --</option>';
-      document.getElementById('journee').disabled = true;
-      document.getElementById('match').innerHTML = '<option value="">-- Choisir un match --</option>';
-      document.getElementById('match').disabled = true;
-      document.getElementById('infoClub').style.display = 'none';
-      document.getElementById('nbPlaces').value = '';
-      document.getElementById('coteCoteDiv').style.display = 'none';
-      document.getElementById('instagram').value = '';
-      document.getElementById('remarques').value = '';
-      document.getElementById('btnValider').disabled = true;
-      document.getElementById('erreur').style.display = 'none';
-      window.scrollTo(0, 0);
-}
   </script>
 </body>
 </html>
