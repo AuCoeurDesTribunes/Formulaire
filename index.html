@@ -518,7 +518,7 @@
         const dom = document.getElementById('autreDomicile').value.trim();
         const ext = document.getElementById('autreExterieur').value.trim();
         const date = document.getElementById('autreDate').value.trim();
-        matchOk = dom && ext && date;
+        matchOk = !!(dom && ext && date);
       } else {
         matchOk = !!document.getElementById('match').value;
       }
