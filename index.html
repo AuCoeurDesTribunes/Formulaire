@@ -605,7 +605,7 @@
           match: matchLabel,
           domicile: domicile,
           exterieur: exterieur,
-          dateMatch: dateMatch,
+          dateMatch: champ === 'Autre' ? document.getElementById('autreDate').value.trim() : dateMatch,
           nbPlaces: nb,
           coteCote: coteCote,
           instagram: insta,
