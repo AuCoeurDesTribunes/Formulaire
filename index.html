@@ -564,7 +564,7 @@
       const nb = document.getElementById('nbPlaces').value;
       const insta = document.getElementById('instagram').value.trim();
       const remarques = document.getElementById('remarques').value.trim();
-      const dateMatch = document.getElementById('dateMatch').value;
+      let dateMatch = document.getElementById('dateMatch').value;
       const btn = document.getElementById('btnValider');
       const conf = document.getElementById('confirmation');
       const err = document.getElementById('erreur');
@@ -583,8 +583,10 @@
         exterieur = document.getElementById('autreExterieur').value.trim();
         const dateAutre = document.getElementById('autreDate').value.trim();
         matchLabel = domicile + ' vs ' + exterieur;
-        journeeLabel = dateAutre;
-      } else {
+        journeeLabel = '';
+        dateMatch = dateAutre; // la date va directement dans dateMatch
+      }
+      else {
         const journee = document.getElementById('journee').value;
         const numJournee = journee.toString().replace(/\D/g, '');
         journeeLabel = 'Journ\u00e9e ' + numJournee;
