@@ -559,12 +559,12 @@
       window.scrollTo(0, 0);
     }
 
-function valider() {
+ function valider() {
       const champ = document.getElementById('championnat').value;
       const nb = document.getElementById('nbPlaces').value;
       const insta = document.getElementById('instagram').value.trim();
       const remarques = document.getElementById('remarques').value.trim();
-      const dateMatch = document.getElementById('dateMatch').value;
+      let dateMatch = document.getElementById('dateMatch').value;
       const btn = document.getElementById('btnValider');
       const conf = document.getElementById('confirmation');
       const err = document.getElementById('erreur');
@@ -584,8 +584,9 @@ function valider() {
         const dateAutre = document.getElementById('autreDate').value.trim();
         matchLabel = domicile + ' vs ' + exterieur;
         journeeLabel = '';
-        dateMatch = dateAutre;
-      } else {
+        dateMatch = dateAutre; // la date va directement dans dateMatch
+      }
+      else {
         const journee = document.getElementById('journee').value;
         const numJournee = journee.toString().replace(/\D/g, '');
         journeeLabel = 'Journ\u00e9e ' + numJournee;
@@ -594,23 +595,6 @@ function valider() {
         domicile = parts[0] || '';
         exterieur = parts[1] || '';
       }
-
-      // Conversion de la date en JJ/MM/AAAA côté HTML
-      const dateFormatee = (function() {
-        if (champ === 'Autre') {
-          return dateMatch; // déjà en JJ/MM/AAAA
-        }
-        if (dateMatch) {
-          var d = new Date(dateMatch);
-          if (!isNaN(d.getTime())) {
-            var jour = String(d.getUTCDate()).padStart(2, '0');
-            var mois = String(d.getUTCMonth() + 1).padStart(2, '0');
-            var annee = d.getUTCFullYear();
-            return jour + '/' + mois + '/' + annee;
-          }
-        }
-        return '';
-      })();
 
       btn.disabled = true;
       btn.textContent = 'Envoi en cours...';
@@ -623,7 +607,7 @@ function valider() {
           match: matchLabel,
           domicile: domicile,
           exterieur: exterieur,
-          dateMatch: dateFormatee,
+          dateMatch: champ === 'Autre' ? document.getElementById('autreDate').value.trim() : dateMatch,
           nbPlaces: nb,
           coteCote: coteCote,
           instagram: insta,
