@@ -559,7 +559,7 @@
       window.scrollTo(0, 0);
     }
 
- function valider() {
+function valider() {
       const champ = document.getElementById('championnat').value;
       const nb = document.getElementById('nbPlaces').value;
       const insta = document.getElementById('instagram').value.trim();
@@ -607,22 +607,7 @@
           match: matchLabel,
           domicile: domicile,
           exterieur: exterieur,
-         dateMatch: (function() {
-              if (champ === 'Autre') {
-                return document.getElementById('autreDate').value.trim();
-              }
-              // Convertit la date ISO en JJ/MM/AAAA côté HTML
-              if (dateMatch) {
-                var d = new Date(dateMatch);
-                if (!isNaN(d.getTime())) {
-                  var jour = String(d.getUTCDate()).padStart(2, '0');
-                  var mois = String(d.getUTCMonth() + 1).padStart(2, '0');
-                  var annee = d.getUTCFullYear();
-                  return jour + '/' + mois + '/' + annee;
-                }
-              }
-              return '';
-            })(),
+          dateMatch: champ === 'Autre' ? document.getElementById('autreDate').value.trim() : dateMatch,
           nbPlaces: nb,
           coteCote: coteCote,
           instagram: insta,
