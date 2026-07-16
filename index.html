@@ -324,7 +324,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwj0b-JwR6alLIroJVynVzggfXs-5vA9E1IwdJPMo7eIZMSWI7L9E1Qaf4zMyXtvyJb/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3xmpGN4g0IglymylArdHl64fuOVXsV_xtsJkk8gyqlO_CAWrrgxnlothRNEAP7vHq/exec';
 
     const MESSAGES_CLUBS = {
       'Manchester United': '&#128241; Bon &#224; savoir : pour ce match, le transfert de billets n&#233;cessite un appareil Android. Merci de le pr&#233;ciser si cela pose un probl&#232;me.',
@@ -534,7 +534,7 @@
 
       document.getElementById('btnValider').disabled = !(matchOk && nb && insta);
     }
-    
+
     function nouvelleDemandeande() {
       document.getElementById('confirmation').style.display = 'none';
       document.getElementById('selectedText').innerHTML = '-- Choisir un championnat --';
@@ -559,12 +559,11 @@
       window.scrollTo(0, 0);
     }
 
-function valider() {
+    function valider() {
       const champ = document.getElementById('championnat').value;
       const nb = document.getElementById('nbPlaces').value;
       const insta = document.getElementById('instagram').value.trim();
       const remarques = document.getElementById('remarques').value.trim();
-      const dateMatch = document.getElementById('dateMatch').value;
       const btn = document.getElementById('btnValider');
       const conf = document.getElementById('confirmation');
       const err = document.getElementById('erreur');
@@ -577,16 +576,15 @@ function valider() {
       let journeeLabel = '';
       let domicile = '';
       let exterieur = '';
+      let dateFormatee = '';
 
       if (champ === 'Autre') {
         domicile = document.getElementById('autreDomicile').value.trim();
         exterieur = document.getElementById('autreExterieur').value.trim();
-        const dateAutre = document.getElementById('autreDate').value.trim();
         matchLabel = domicile + ' vs ' + exterieur;
         journeeLabel = '';
-        dateMatch = dateAutre; // la date va directement dans dateMatch
-      }
-      else {
+        dateFormatee = document.getElementById('autreDate').value.trim();
+      } else {
         const journee = document.getElementById('journee').value;
         const numJournee = journee.toString().replace(/\D/g, '');
         journeeLabel = 'Journ\u00e9e ' + numJournee;
@@ -594,6 +592,17 @@ function valider() {
         const parts = matchLabel.split(' vs ');
         domicile = parts[0] || '';
         exterieur = parts[1] || '';
+        // Conversion ISO -> JJ/MM/AAAA côté HTML
+        const dateISO = document.getElementById('dateMatch').value;
+        if (dateISO) {
+          const d = new Date(dateISO);
+          if (!isNaN(d.getTime())) {
+            const jour = String(d.getUTCDate()).padStart(2, '0');
+            const mois = String(d.getUTCMonth() + 1).padStart(2, '0');
+            const annee = d.getUTCFullYear();
+            dateFormatee = jour + '/' + mois + '/' + annee;
+          }
+        }
       }
 
       btn.disabled = true;
@@ -607,7 +616,7 @@ function valider() {
           match: matchLabel,
           domicile: domicile,
           exterieur: exterieur,
-          dateMatch: champ === 'Autre' ? document.getElementById('autreDate').value.trim() : dateMatch,
+          dateMatch: dateFormatee,
           nbPlaces: nb,
           coteCote: coteCote,
           instagram: insta,
