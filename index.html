@@ -471,9 +471,11 @@
             const opt = document.createElement('option');
             opt.value = m.domicile + ' vs ' + m.exterieur;
             opt.dataset.date = m.dateISO || '';
-            const dateStr = m.date ? ' \u2014 ' + new Date(m.date).toLocaleDateString('fr-FR') : '';
-            opt.textContent = m.domicile + ' vs ' + m.exterieur + dateStr;
-            selM.appendChild(opt);
+            let dateStr = '';
+            if (m.dateISO) {
+                const [y, mo, d] = m.dateISO.split('-');
+                dateStr = ' — ' + d + '/' + mo + '/' + y;
+            }
           });
           selM.disabled = false;
         } else {
@@ -593,14 +595,7 @@
         domicile = parts[0] || '';
         exterieur = parts[1] || '';
        
-        const dateISO = document.getElementById('dateMatch').value;
-        if (dateISO) {
-          // Extrait directement les parties de la date ISO sans conversion
-          const parts = dateISO.split('T')[0].split('-');
-          if (parts.length === 3) {
-            dateFormatee = parts[2] + '/' + parts[1] + '/' + parts[0];
-          }
-        }
+        dateFormatee = document.getElementById('dateMatch').value;
       }
 
       btn.disabled = true;
