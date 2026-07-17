@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html>
 <head>
   <meta charset="UTF-8">
@@ -225,102 +224,102 @@
 <body>
   <div class="card">
 
-<img src="https://lh3.googleusercontent.com/a/ACg8ocJ2hyWT-Cpq-XEg-oIX9msJIimG3dPKIvHyIYa7hZZb9P5cUGg=s360-c-no" alt="Au Coeur des Tribunes" class="logo">
+    <img src="https://lh3.googleusercontent.com/a/ACg8ocJ2hyWT-Cpq-XEg-oIX9msJIimG3dPKIvHyIYa7hZZb9P5cUGg=s360-c-no" alt="Au Coeur des Tribunes" class="logo">
 
-<h2>Ma demande de billet</h2>
-<p class="subtitle">
-  <strong>Au C&#339;ur des Tribunes vous souhaite la bienvenue !</strong><br><br>
-  Vous avez un match en t&#234;te, un match de r&#234;ve ou envie de vivre une parent&#232;se football lors de votre prochain voyage ? On a peut-&#234;tre ce qu'il vous faut !<br><br>
-  Remplis le formulaire ci-dessous pour faire ta demande &#128071;
-</p>
+    <h2>Ma demande de billet</h2>
+    <p class="subtitle">
+      <strong>Au C&#339;ur des Tribunes vous souhaite la bienvenue !</strong><br><br>
+      Vous avez un match en t&#234;te, un match de r&#234;ve ou envie de vivre une parent&#232;se football lors de votre prochain voyage ? On a peut-&#234;tre ce qu'il vous faut !<br><br>
+      Remplis le formulaire ci-dessous pour faire ta demande &#128071;
+    </p>
 
-<label class="section-title">Le match</label>
+    <label class="section-title">Le match</label>
 
-<label>Championnat</label>
-<div class="custom-select" id="customChampionnat">
-  <div class="custom-select-selected" id="selectedLabel">
-    <span id="selectedText">-- Choisir un championnat --</span>
-    <span class="arrow">&#9660;</span>
-  </div>
-  <div class="custom-select-options" id="customOptions" style="display:none;"></div>
-</div>
-<input type="hidden" id="championnat">
-<input type="hidden" id="dateMatch">
-
-<div id="champAutre">
-  <div class="champ-autre-grid">
-    <div>
-      <label>&#127968; &#201;quipe domicile</label>
-      <input type="text" id="autreDomicile" placeholder="Ex : Real Madrid" oninput="checkForm()">
+    <label>Championnat</label>
+    <div class="custom-select" id="customChampionnat">
+      <div class="custom-select-selected" id="selectedLabel">
+        <span id="selectedText">-- Choisir un championnat --</span>
+        <span class="arrow">&#9660;</span>
+      </div>
+      <div class="custom-select-options" id="customOptions" style="display:none;"></div>
     </div>
-    <div>
-      <label>&#9992;&#65039; &#201;quipe ext&#233;rieur</label>
-      <input type="text" id="autreExterieur" placeholder="Ex : Barcelone" oninput="checkForm()">
+    <input type="hidden" id="championnat">
+    <input type="hidden" id="dateMatch">
+
+    <div id="champAutre">
+      <div class="champ-autre-grid">
+        <div>
+          <label>&#127968; &#201;quipe domicile</label>
+          <input type="text" id="autreDomicile" placeholder="Ex : Real Madrid" oninput="checkForm()">
+        </div>
+        <div>
+          <label>&#9992;&#65039; &#201;quipe ext&#233;rieur</label>
+          <input type="text" id="autreExterieur" placeholder="Ex : Barcelone" oninput="checkForm()">
+        </div>
+      </div>
+      <label>&#128197; Date souhait&#233;e</label>
+      <input type="text" id="autreDate" placeholder="JJ/MM/AAAA" maxlength="10" oninput="formatDate(this); checkForm()">
     </div>
-  </div>
-  <label>&#128197; Date souhait&#233;e</label>
-  <input type="text" id="autreDate" placeholder="JJ/MM/AAAA" maxlength="10" oninput="formatDate(this); checkForm()">
-</div>
 
-<div id="sectionJournee">
-  <label>Journ&#233;e</label>
-  <select id="journee" onchange="loadMatchs()" disabled>
-    <option value="">-- Choisir une journ&#233;e --</option>
-  </select>
+    <div id="sectionJournee">
+      <label>Journ&#233;e</label>
+      <select id="journee" onchange="loadMatchs()" disabled>
+        <option value="">-- Choisir une journ&#233;e --</option>
+      </select>
 
-  <label>Match</label>
-  <select id="match" onchange="onMatchChange()" disabled>
-    <option value="">-- Choisir un match --</option>
-  </select>
+      <label>Match</label>
+      <select id="match" onchange="onMatchChange()" disabled>
+        <option value="">-- Choisir un match --</option>
+      </select>
 
-  <div class="info-date">
-    &#128197; Les dates affich&#233;es sont th&#233;oriques. Veuillez vous r&#233;f&#233;rer aux programmations officielles ou nous contacter sur Instagram pour plus d'informations.
-  </div>
+      <div class="info-date">
+        &#128197; Les dates affich&#233;es sont th&#233;oriques. Veuillez vous r&#233;f&#233;rer aux programmations officielles ou nous contacter sur Instagram pour plus d'informations.
+      </div>
 
-  <div class="info-club" id="infoClub"></div>
-</div>
+      <div class="info-club" id="infoClub"></div>
+    </div>
 
-<hr class="section-divider">
-<label class="section-title">Les places</label>
+    <hr class="section-divider">
+    <label class="section-title">Les places</label>
 
-<label>Nombre de places souhait&#233;es</label>
-<select id="nbPlaces" onchange="checkCoteCote()">
-  <option value="">-- Choisir --</option>
-  <option value="1">1 place</option>
-  <option value="2">2 places</option>
-  <option value="3">3 places</option>
-  <option value="4">4 places</option>
-  <option value="5">5 places</option>
-  <option value="6">6 places ou plus</option>
-</select>
+    <label>Nombre de places souhait&#233;es</label>
+    <select id="nbPlaces" onchange="checkCoteCote()">
+      <option value="">-- Choisir --</option>
+      <option value="1">1 place</option>
+      <option value="2">2 places</option>
+      <option value="3">3 places</option>
+      <option value="4">4 places</option>
+      <option value="5">5 places</option>
+      <option value="6">6 places ou plus</option>
+    </select>
 
-<div id="coteCoteDiv" style="display:none;">
-  <label>Les places doivent-elles &#234;tre c&#244;te &#224; c&#244;te ?</label>
-  <div class="radio-group">
-    <label><input type="radio" name="coteCote" value="Oui"> Oui</label>
-    <label><input type="radio" name="coteCote" value="Non"> Non</label>
-    <label><input type="radio" name="coteCote" value="Peu importe" checked> Peu importe</label>
-  </div>
-</div>
+    <div id="coteCoteDiv" style="display:none;">
+      <label>Les places doivent-elles &#234;tre c&#244;te &#224; c&#244;te ?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="coteCote" value="Oui"> Oui</label>
+        <label><input type="radio" name="coteCote" value="Non"> Non</label>
+        <label><input type="radio" name="coteCote" value="Peu importe" checked> Peu importe</label>
+      </div>
+    </div>
 
-<hr class="section-divider">
-<label class="section-title">Contact</label>
+    <hr class="section-divider">
+    <label class="section-title">Contact</label>
 
-<label>&#128248; Ton pseudo Instagram</label>
-<input type="text" id="instagram" placeholder="@tonpseudo" oninput="checkForm()">
+    <label>&#128248; Ton pseudo Instagram</label>
+    <input type="text" id="instagram" placeholder="@tonpseudo" oninput="checkForm()">
 
-<label>&#128172; Remarques ou pr&#233;cisions <span style="font-weight:normal;color:#aaa;">(facultatif)</span></label>
-<textarea id="remarques" placeholder="Ex : d&#233;placement d&#233;j&#224; pr&#233;vu, int&#233;r&#234;t pour d'autres matchs du m&#234;me week-end, tribune vis&#233;e..."></textarea>
+    <label>&#128172; Remarques ou pr&#233;cisions <span style="font-weight:normal;color:#aaa;">(facultatif)</span></label>
+    <textarea id="remarques" placeholder="Ex : d&#233;placement d&#233;j&#224; pr&#233;vu, int&#233;r&#234;t pour d'autres matchs du m&#234;me week-end, tribune vis&#233;e..."></textarea>
 
-<button id="btnValider" onclick="valider()" disabled>Envoyer ma demande</button>
-<p style="text-align:center;font-size:12px;color:#888;margin-top:10px;">&#9888;&#65039; 3 demandes maximum par club</p>
+    <button id="btnValider" onclick="valider()" disabled>Envoyer ma demande</button>
+    <p style="text-align:center;font-size:12px;color:#888;margin-top:10px;">&#9888;&#65039; 3 demandes maximum par club</p>
 
-<div id="confirmation"></div>
-<div id="erreur"></div>
+    <div id="confirmation"></div>
+    <div id="erreur"></div>
 
-<div class="info-bottom">
-  &#8505;&#65039; Les demandes sont trait&#233;es par ordre chronologique. Nous vous recontactons uniquement lorsque nous avons des billets correspondant &#224; vos crit&#232;res. L'absence de r&#233;ponse ne signifie pas un refus d&#233;finitif : les disponibilit&#233;s &#233;voluent parfois jusqu'aux derniers jours avant le match.
-</div>
+    <div class="info-bottom">
+      &#8505;&#65039; Les demandes sont trait&#233;es par ordre chronologique. Nous vous recontactons uniquement lorsque nous avons des billets correspondant &#224; vos crit&#232;res. L'absence de r&#233;ponse ne signifie pas un refus d&#233;finitif : les disponibilit&#233;s &#233;voluent parfois jusqu'aux derniers jours avant le match.
+    </div>
 
   </div>
 
@@ -577,14 +576,23 @@
       let journeeLabel = '';
       let domicile = '';
       let exterieur = '';
-      let dateFormatee = '';
+      let dateEnvoi = '';
 
       if (champ === 'Autre') {
         domicile = document.getElementById('autreDomicile').value.trim();
         exterieur = document.getElementById('autreExterieur').value.trim();
         matchLabel = domicile + ' vs ' + exterieur;
         journeeLabel = '';
-        dateFormatee = document.getElementById('autreDate').value.trim();
+        // Convertit JJ/MM/AAAA en ISO pour envoi
+        const dateAutre = document.getElementById('autreDate').value.trim();
+        const parts = dateAutre.split('/');
+        if (parts.length === 3) {
+          dateEnvoi = new Date(
+            parseInt(parts[2]),
+            parseInt(parts[1]) - 1,
+            parseInt(parts[0])
+          ).toISOString();
+        }
       } else {
         const journee = document.getElementById('journee').value;
         const numJournee = journee.toString().replace(/\D/g, '');
@@ -593,15 +601,7 @@
         const parts = matchLabel.split(' vs ');
         domicile = parts[0] || '';
         exterieur = parts[1] || '';
-       
-        const dateISO = document.getElementById('dateMatch').value;
-        if (dateISO) {
-          // Extrait directement les parties de la date ISO sans conversion
-          const parts = dateISO.split('T')[0].split('-');
-          if (parts.length === 3) {
-            dateFormatee = parts[2] + '/' + parts[1] + '/' + parts[0];
-          }
-        }
+        dateEnvoi = document.getElementById('dateMatch').value;
       }
 
       btn.disabled = true;
@@ -615,7 +615,7 @@
           match: matchLabel,
           domicile: domicile,
           exterieur: exterieur,
-          dateMatch: dateFormatee,
+          dateMatch: dateEnvoi,
           nbPlaces: nb,
           coteCote: coteCote,
           instagram: insta,
@@ -640,6 +640,5 @@
       });
     }
   </script>
-
 </body>
 </html>
