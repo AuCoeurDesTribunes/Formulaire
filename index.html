@@ -356,7 +356,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = 'hhttps://script.google.com/macros/s/AKfycby3xmpGN4g0IglymylArdHl64fuOVXsV_xtsJkk8gyqlO_CAWrrgxnlothRNEAP7vHq/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwj0b-JwR6alLIroJVynVzggfXs-5vA9E1IwdJPMo7eIZMSWI7L9E1Qaf4zMyXtvyJb/exec';
 
     const MESSAGES_CLUBS = {
       'Manchester United': '&#128241; Bon &#224; savoir : pour ce match, le transfert de billets n&#233;cessite un appareil Android. Merci de le pr&#233;ciser si cela pose un probl&#232;me.',
@@ -372,8 +372,8 @@
     };
 
     var dropdownOpen = false;
+    var championnatsCharges = false;
 
-    // Retry automatique en cas d'erreur
     function callScript(action, params, tentative) {
       tentative = tentative || 1;
       return fetch(SCRIPT_URL, {
@@ -383,7 +383,6 @@
         return r.json();
       }).catch(function(err) {
         if (tentative < 3) {
-          console.log('Tentative ' + tentative + ' &#233;chou&#233;e, nouvel essai...');
           return new Promise(function(resolve) {
             setTimeout(function() {
               resolve(callScript(action, params, tentative + 1));
@@ -394,9 +393,10 @@
       });
     }
 
-    window.addEventListener('load', function() {
-      callScript('getChampionnats').then(function(championnats) {
+    // Chargement des championnats
+    callScript('getChampionnats').then(function(championnats) {
       const options = document.getElementById('customOptions');
+      championnatsCharges = true;
 
       championnats.forEach(function(c) {
         const flagUrl = CHAMPIONNATS_FLAGS[c] || '';
@@ -421,11 +421,16 @@
 
     }).catch(function(err) {
       console.log('Erreur chargement championnats : ' + err);
+      document.getElementById('selectedText').innerHTML = '&#10060; Erreur de chargement — Actualisez la page';
     });
 
     document.getElementById('selectedLabel').addEventListener('mousedown', function(e) {
       e.stopPropagation();
       const opts = document.getElementById('customOptions');
+      if (!championnatsCharges) {
+        document.getElementById('selectedText').innerHTML = '&#9203; Chargement en cours...';
+        return;
+      }
       dropdownOpen = !dropdownOpen;
       opts.style.display = dropdownOpen ? 'block' : 'none';
     });
@@ -495,7 +500,7 @@
         selJ.disabled = false;
       }).catch(function() {
         document.getElementById('msgChargementJournee').style.display = 'none';
-        selJ.innerHTML = '<option value="">Erreur — Veuillez r&#233;essayer</option>';
+        selJ.innerHTML = '<option value="">Erreur — Veuillez r\u00e9essayer</option>';
       });
     }
 
@@ -534,7 +539,7 @@
         checkForm();
       }).catch(function() {
         document.getElementById('msgChargementMatch').style.display = 'none';
-        selM.innerHTML = '<option value="">Erreur — Veuillez r&#233;essayer</option>';
+        selM.innerHTML = '<option value="">Erreur — Veuillez r\u00e9essayer</option>';
       });
     }
 
@@ -589,11 +594,8 @@
     }
 
     function nouvelleDemandeande() {
-      // Cache le recap et réaffiche le formulaire
       document.getElementById('recapCard').style.display = 'none';
       document.getElementById('mainCard').style.display = 'block';
-
-      // Remet tout à zéro
       document.getElementById('selectedText').innerHTML = '-- Choisir un championnat --';
       document.getElementById('championnat').value = '';
       document.getElementById('dateMatch').value = '';
@@ -661,7 +663,6 @@
         dateEnvoi = document.getElementById('dateMatch').value;
       }
 
-      // Désactive le bouton et affiche chargement
       btn.disabled = true;
       btn.textContent = 'Envoi en cours...';
       err.style.display = 'none';
@@ -680,10 +681,7 @@
           remarques: remarques
         }
       }).then(function(id) {
-        // Cache le formulaire
         document.getElementById('mainCard').style.display = 'none';
-
-        // Affiche le recap
         document.getElementById('recapContenu').innerHTML =
           '&#9989; Ta demande a bien &#233;t&#233; re&#231;ue !<br>'
           + '<small style="color:#888;">R&#233;f&#233;rence : <strong>' + id + '</strong></small><br><br>'
@@ -691,19 +689,17 @@
           + '&#9917; ' + matchLabel + '<br>'
           + '&#127915; ' + nb + ' place(s)' + (coteCote !== 'N/A' ? ' &#8212; C&#244;te &#224; c&#244;te : ' + coteCote : '') + '<br>'
           + '&#128248; ' + insta;
-
         document.getElementById('recapCard').style.display = 'block';
         btn.textContent = 'Envoyer ma demande';
         btn.disabled = false;
         window.scrollTo(0, 0);
-
       }).catch(function() {
         err.style.display = 'block';
         err.innerHTML = '&#10060; Erreur lors de l\'envoi. R&#233;essaie.';
         btn.textContent = 'Envoyer ma demande';
         btn.disabled = false;
       });
-    })
+    }
   </script>
 </body>
 </html>
