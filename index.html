@@ -122,13 +122,6 @@
       line-height: 1.6;
       text-align: center;
     }
-    .msg-chargement {
-      display: none;
-      font-size: 12px;
-      color: #888;
-      margin-top: 5px;
-      font-style: italic;
-    }
     button {
       width: 100%;
       margin-top: 30px;
@@ -226,20 +219,10 @@
     .custom-select-option .name {
       flex: 1;
     }
-    .recap-card {
-      display: none;
-      background: white;
-      border-radius: 10px;
-      padding: 30px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      text-align: center;
-    }
   </style>
 </head>
 <body>
-
-  <!-- Formulaire principal -->
-  <div class="card" id="mainCard">
+  <div class="card">
 
     <img src="https://lh3.googleusercontent.com/a/ACg8ocJ2hyWT-Cpq-XEg-oIX9msJIimG3dPKIvHyIYa7hZZb9P5cUGg=s360-c-no" alt="Au Coeur des Tribunes" class="logo">
 
@@ -283,17 +266,11 @@
       <select id="journee" onchange="loadMatchs()" disabled>
         <option value="">-- Choisir une journ&#233;e --</option>
       </select>
-      <p id="msgChargementJournee" class="msg-chargement">
-        &#9201;&#65039; Premi&#232;re connexion plus longue, merci de patienter...
-      </p>
 
       <label>Match</label>
       <select id="match" onchange="onMatchChange()" disabled>
         <option value="">-- Choisir un match --</option>
       </select>
-      <p id="msgChargementMatch" class="msg-chargement">
-        &#9201;&#65039; Chargement des matchs en cours...
-      </p>
 
       <div class="info-date">
         &#128197; Les dates affich&#233;es sont th&#233;oriques. Veuillez vous r&#233;f&#233;rer aux programmations officielles ou nous contacter sur Instagram pour plus d'informations.
@@ -337,22 +314,13 @@
     <button id="btnValider" onclick="valider()" disabled>Envoyer ma demande</button>
     <p style="text-align:center;font-size:12px;color:#888;margin-top:10px;">&#9888;&#65039; 3 demandes maximum par club</p>
 
+    <div id="confirmation"></div>
     <div id="erreur"></div>
 
     <div class="info-bottom">
       &#8505;&#65039; Les demandes sont trait&#233;es par ordre chronologique. Nous vous recontactons uniquement lorsque nous avons des billets correspondant &#224; vos crit&#232;res. L'absence de r&#233;ponse ne signifie pas un refus d&#233;finitif : les disponibilit&#233;s &#233;voluent parfois jusqu'aux derniers jours avant le match.
     </div>
 
-  </div>
-
-  <!-- Recap après envoi -->
-  <div class="recap-card" id="recapCard">
-    <img src="https://lh3.googleusercontent.com/a/ACg8ocJ2hyWT-Cpq-XEg-oIX9msJIimG3dPKIvHyIYa7hZZb9P5cUGg=s360-c-no" style="width:70px;height:70px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 16px auto;">
-    <div id="recapContenu" style="color:#2d7a3a;line-height:1.8;"></div>
-    <br>
-    <button onmousedown="nouvelleDemandeande()" style="background:#1565C0;color:white;border:none;padding:10px 20px;border-radius:6px;font-size:14px;cursor:pointer;width:auto;margin-top:0;">
-      &#43; Effectuer une autre demande
-    </button>
   </div>
 
   <script>
@@ -372,55 +340,56 @@
     };
 
     var dropdownOpen = false;
-    var championnatsCharges = false;
 
-    function callScript(action, params, tentative) {
-      tentative = tentative || 1;
+    function callScript(action, params) {
       return fetch(SCRIPT_URL, {
         method: 'POST',
         body: JSON.stringify(Object.assign({ action: action }, params))
-      }).then(function(r) {
-        return r.json();
-      }).catch(function(err) {
-        if (tentative < 3) {
-          return new Promise(function(resolve) {
-            setTimeout(function() {
-              resolve(callScript(action, params, tentative + 1));
-            }, 2000);
-          });
-        }
-        throw err;
-      });
+      }).then(function(r) { return r.json(); });
     }
 
-    // Championnats en dur
-    const CHAMPIONNATS = ['Bundesliga', 'Liga', 'Ligue 1', 'Premier League', 'Serie A'];
+    callScript('getChampionnats').then(function(championnats) {
+      const options = document.getElementById('customOptions');
 
-    (function() {
-     const options = document.getElementById('customOptions');
-    championnatsCharges = true;
+      championnats.forEach(function(c) {
+        const flagUrl = CHAMPIONNATS_FLAGS[c] || '';
+        const div = document.createElement('div');
+        div.className = 'custom-select-option';
+        div.innerHTML = (flagUrl ? '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;flex-shrink:0;">' : '') + '<span class="name">' + c + '</span>';
+        div.addEventListener('mousedown', function(e) {
+          e.preventDefault();
+          selectChampionnat(c, (flagUrl ? '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:8px;">' : '') + c);
+        });
+        options.appendChild(div);
+      });
 
-    CHAMPIONNATS.forEach(function(c) {
-    const flagUrl = CHAMPIONNATS_FLAGS[c] || '';
-    const div = document.createElement('div');
-    div.className = 'custom-select-option';
-    div.innerHTML = (flagUrl ? '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;flex-shrink:0;">' : '') + '<span class="name">' + c + '</span>';
-    div.addEventListener('mousedown', function(e) {
-      e.preventDefault();
-      selectChampionnat(c, (flagUrl ? '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:8px;">' : '') + c);
+      const divAutre = document.createElement('div');
+      divAutre.className = 'custom-select-option';
+      divAutre.innerHTML = '<span style="width:24px;text-align:center;">&#127942;</span><span class="name">Autre championnat ou coupe</span>';
+      divAutre.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        selectChampionnat('Autre', '&#127942; Autre championnat ou coupe');
+      });
+      options.appendChild(divAutre);
+
+    }).catch(function(err) {
+      console.log('Erreur : ' + err);
     });
-    options.appendChild(div);
-  });
 
-  const divAutre = document.createElement('div');
-  divAutre.className = 'custom-select-option';
-  divAutre.innerHTML = '<span style="width:24px;text-align:center;">&#127942;</span><span class="name">Autre championnat ou coupe</span>';
-  divAutre.addEventListener('mousedown', function(e) {
-    e.preventDefault();
-    selectChampionnat('Autre', '&#127942; Autre championnat ou coupe');
-  });
-  options.appendChild(divAutre);
-})();
+    document.getElementById('selectedLabel').addEventListener('mousedown', function(e) {
+      e.stopPropagation();
+      const opts = document.getElementById('customOptions');
+      dropdownOpen = !dropdownOpen;
+      opts.style.display = dropdownOpen ? 'block' : 'none';
+    });
+
+    document.addEventListener('mousedown', function(e) {
+      const container = document.getElementById('customChampionnat');
+      if (!container.contains(e.target)) {
+        document.getElementById('customOptions').style.display = 'none';
+        dropdownOpen = false;
+      }
+    });
 
     function selectChampionnat(value, label) {
       document.getElementById('championnat').value = value;
@@ -457,9 +426,8 @@
 
       sectionJournee.style.display = 'block';
       champAutre.style.display = 'none';
-      selJ.innerHTML = '<option value="">&#9203; Chargement...</option>';
+      selJ.innerHTML = '<option value="">Chargement...</option>';
       selJ.disabled = true;
-      document.getElementById('msgChargementJournee').style.display = 'block';
       selM.innerHTML = '<option value="">-- Choisir un match --</option>';
       selM.disabled = true;
       checkForm();
@@ -467,7 +435,6 @@
       if (!champ) return;
 
       callScript('getJournees', { championnat: champ }).then(function(journees) {
-        document.getElementById('msgChargementJournee').style.display = 'none';
         selJ.innerHTML = '<option value="">-- Choisir une journ\u00e9e --</option>';
         journees.forEach(function(j) {
           const opt = document.createElement('option');
@@ -478,8 +445,7 @@
         });
         selJ.disabled = false;
       }).catch(function() {
-        document.getElementById('msgChargementJournee').style.display = 'none';
-        selJ.innerHTML = '<option value="">Erreur — Veuillez r\u00e9essayer</option>';
+        selJ.innerHTML = '<option value="">Erreur</option>';
       });
     }
 
@@ -492,15 +458,13 @@
       infoClub.style.display = 'none';
       infoClub.innerHTML = '';
       document.getElementById('dateMatch').value = '';
-      selM.innerHTML = '<option value="">&#9203; Chargement...</option>';
+      selM.innerHTML = '<option value="">Chargement...</option>';
       selM.disabled = true;
-      document.getElementById('msgChargementMatch').style.display = 'block';
       checkForm();
 
       if (!journee) return;
 
       callScript('getMatchs', { championnat: champ, journee: journee }).then(function(matchs) {
-        document.getElementById('msgChargementMatch').style.display = 'none';
         selM.innerHTML = '<option value="">-- Choisir un match --</option>';
         if (matchs && matchs.length > 0) {
           matchs.forEach(function(m) {
@@ -517,8 +481,7 @@
         }
         checkForm();
       }).catch(function() {
-        document.getElementById('msgChargementMatch').style.display = 'none';
-        selM.innerHTML = '<option value="">Erreur — Veuillez r\u00e9essayer</option>';
+        selM.innerHTML = '<option value="">Erreur</option>';
       });
     }
 
@@ -573,8 +536,7 @@
     }
 
     function nouvelleDemandeande() {
-      document.getElementById('recapCard').style.display = 'none';
-      document.getElementById('mainCard').style.display = 'block';
+      document.getElementById('confirmation').style.display = 'none';
       document.getElementById('selectedText').innerHTML = '-- Choisir un championnat --';
       document.getElementById('championnat').value = '';
       document.getElementById('dateMatch').value = '';
@@ -594,8 +556,6 @@
       document.getElementById('autreDate').value = '';
       document.getElementById('btnValider').disabled = true;
       document.getElementById('erreur').style.display = 'none';
-      document.getElementById('msgChargementJournee').style.display = 'none';
-      document.getElementById('msgChargementMatch').style.display = 'none';
       window.scrollTo(0, 0);
     }
 
@@ -605,6 +565,7 @@
       const insta = document.getElementById('instagram').value.trim();
       const remarques = document.getElementById('remarques').value.trim();
       const btn = document.getElementById('btnValider');
+      const conf = document.getElementById('confirmation');
       const err = document.getElementById('erreur');
 
       const radios = document.querySelectorAll('input[name="coteCote"]');
@@ -622,6 +583,7 @@
         exterieur = document.getElementById('autreExterieur').value.trim();
         matchLabel = domicile + ' vs ' + exterieur;
         journeeLabel = '';
+        // Convertit JJ/MM/AAAA en ISO pour envoi
         const dateAutre = document.getElementById('autreDate').value.trim();
         const parts = dateAutre.split('/');
         if (parts.length === 3) {
@@ -660,18 +622,16 @@
           remarques: remarques
         }
       }).then(function(id) {
-        document.getElementById('mainCard').style.display = 'none';
-        document.getElementById('recapContenu').innerHTML =
-          '&#9989; Ta demande a bien &#233;t&#233; re&#231;ue !<br>'
+        conf.style.display = 'block';
+        conf.innerHTML = '&#9989; Ta demande a bien &#233;t&#233; re&#231;ue !<br>'
           + '<small style="color:#888;">R&#233;f&#233;rence : <strong>' + id + '</strong></small><br><br>'
           + '<strong>' + champ + ' &#8212; ' + journeeLabel + '</strong><br>'
           + '&#9917; ' + matchLabel + '<br>'
           + '&#127915; ' + nb + ' place(s)' + (coteCote !== 'N/A' ? ' &#8212; C&#244;te &#224; c&#244;te : ' + coteCote : '') + '<br>'
-          + '&#128248; ' + insta;
-        document.getElementById('recapCard').style.display = 'block';
+          + '&#128248; ' + insta + '<br><br>'
+          + '<button onmousedown="nouvelleDemandeande()" style="background:#1565C0;color:white;border:none;padding:10px 20px;border-radius:6px;font-size:14px;cursor:pointer;width:auto;">&#43; Effectuer une autre demande</button>';
         btn.textContent = 'Envoyer ma demande';
         btn.disabled = false;
-        window.scrollTo(0, 0);
       }).catch(function() {
         err.style.display = 'block';
         err.innerHTML = '&#10060; Erreur lors de l\'envoi. R&#233;essaie.';
@@ -679,6 +639,3 @@
         btn.disabled = false;
       });
     }
-  </script>
-</body>
-</html>
