@@ -394,7 +394,8 @@
       });
     }
 
-    callScript('getChampionnats').then(function(championnats) {
+    window.addEventListener('load', function() {
+      callScript('getChampionnats').then(function(championnats) {
       const options = document.getElementById('customOptions');
 
       championnats.forEach(function(c) {
@@ -702,7 +703,7 @@
         btn.textContent = 'Envoyer ma demande';
         btn.disabled = false;
       });
-    }
+    })
   </script>
 </body>
 </html>
