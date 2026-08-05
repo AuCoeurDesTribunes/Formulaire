@@ -376,14 +376,14 @@ const CHAMPIONNATS = ['Bundesliga', 'Liga', 'Ligue 1', 'Premier League', 'Serie 
   options.appendChild(divAutre);
 })();
 
-    document.getElementById('selectedLabel').addEventListener('mousedown', function(e) {
-      e.stopPropagation();
-      const opts = document.getElementById('customOptions');
-      dropdownOpen = !dropdownOpen;
-      opts.style.display = dropdownOpen ? 'block' : 'none';
-    });
-
-    document.addEventListener('mousedown', function(e) {
+    document.getElementById('selectedLabel').addEventListener('click', function(e) {
+  e.stopPropagation();
+  const opts = document.getElementById('customOptions');
+  dropdownOpen = !dropdownOpen;
+  opts.style.display = dropdownOpen ? 'block' : 'none';
+});
+    
+    document.addEventListener('click', function(e) {
       const container = document.getElementById('customChampionnat');
       if (!container.contains(e.target)) {
         document.getElementById('customOptions').style.display = 'none';
