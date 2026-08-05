@@ -348,33 +348,33 @@
       }).then(function(r) { return r.json(); });
     }
 
-    callScript('getChampionnats').then(function(championnats) {
-      const options = document.getElementById('customOptions');
+   // Championnats en dur — instantané, pas d'appel réseau
+const CHAMPIONNATS = ['Bundesliga', 'Liga', 'Ligue 1', 'Premier League', 'Serie A'];
 
-      championnats.forEach(function(c) {
-        const flagUrl = CHAMPIONNATS_FLAGS[c] || '';
-        const div = document.createElement('div');
-        div.className = 'custom-select-option';
-        div.innerHTML = (flagUrl ? '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;flex-shrink:0;">' : '') + '<span class="name">' + c + '</span>';
-        div.addEventListener('mousedown', function(e) {
-          e.preventDefault();
-          selectChampionnat(c, (flagUrl ? '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:8px;">' : '') + c);
-        });
-        options.appendChild(div);
-      });
+(function() {
+  const options = document.getElementById('customOptions');
 
-      const divAutre = document.createElement('div');
-      divAutre.className = 'custom-select-option';
-      divAutre.innerHTML = '<span style="width:24px;text-align:center;">&#127942;</span><span class="name">Autre championnat ou coupe</span>';
-      divAutre.addEventListener('mousedown', function(e) {
-        e.preventDefault();
-        selectChampionnat('Autre', '&#127942; Autre championnat ou coupe');
-      });
-      options.appendChild(divAutre);
-
-    }).catch(function(err) {
-      console.log('Erreur : ' + err);
+  CHAMPIONNATS.forEach(function(c) {
+    const flagUrl = CHAMPIONNATS_FLAGS[c] || '';
+    const div = document.createElement('div');
+    div.className = 'custom-select-option';
+    div.innerHTML = (flagUrl ? '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;flex-shrink:0;">' : '') + '<span class="name">' + c + '</span>';
+    div.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      selectChampionnat(c, (flagUrl ? '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:8px;">' : '') + c);
     });
+    options.appendChild(div);
+  });
+
+  const divAutre = document.createElement('div');
+  divAutre.className = 'custom-select-option';
+  divAutre.innerHTML = '<span style="width:24px;text-align:center;">&#127942;</span><span class="name">Autre championnat ou coupe</span>';
+  divAutre.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    selectChampionnat('Autre', '&#127942; Autre championnat ou coupe');
+  });
+  options.appendChild(divAutre);
+})();
 
     document.getElementById('selectedLabel').addEventListener('mousedown', function(e) {
       e.stopPropagation();
