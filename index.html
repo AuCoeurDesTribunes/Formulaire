@@ -868,7 +868,7 @@ function loadMatchs() {
         return wrap;
       }
 
-      var nombre = creerChamp(['1','2','3','4','5','6','7','8','9','10 ou plus'], 'Nb');
+      var nombre = creerChamp(['1','2','3','4','5 ou plus',], 'Nb');
       nombre.dataset.field = 'nombre';
       nombre.addEventListener('change', checkHelpForm);
 
@@ -897,7 +897,7 @@ function loadMatchs() {
       row.appendChild(clubWrap);
 
       var remarques = document.createElement('textarea');
-      remarques.placeholder = 'Remarques (facultatif)';
+      remarques.placeholder = 'Nombre de place(s) possible(s), Date de fin de validité, Loyalty Points...';
       remarques.dataset.field = 'remarques';
       row.appendChild(field('Remarques (facultatif)', remarques, 'remarks-field'));
 
