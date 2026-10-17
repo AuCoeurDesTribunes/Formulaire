@@ -401,30 +401,28 @@
     <h2>Aider la communauté</h2>
     <div class="help-explanation">
       <p><strong>🤝 Partageons nos accès billetterie !</strong></p>
-      <p>L’objectif est simple : <strong>mettre en commun les memberships, abonnements et autres statuts de notre communauté</strong> afin de permettre au plus grand nombre d’accéder à des billetteries de clubs auxquels nous n’avons pas forcément accès par nos propres moyens.</p>
-      <p>Si tu disposes d’un abonnement, d’un membership ou de tout autre statut donnant accès à une billetterie ou à des avantages particuliers, nous t’invitons à le renseigner via ce formulaire. Chaque accès partagé peut permettre à d’autres membres de la communauté d’obtenir des billets plus facilement !</p>
-      <p><strong>🎟️ Une contrepartie pour les membres participants</strong></p>
-      <p>Pour remercier les titulaires qui mettent leurs accès à disposition, une compensation financière sera prévue pour chaque billet acheté grâce à leur accès. Le montant sera défini directement avec chaque personne, afin de contribuer à amortir le coût de l’abonnement ou du membership.</p>
-      <p>Le principe est simple : <strong>plus nous mutualisons nos accès, plus nous multiplions les possibilités pour tous !</strong></p>
-      <p>Merci à tous ceux qui participeront à cette initiative et contribueront à faire grandir la communauté.</p>
+      <p>L’objectif est de <strong>mutualiser les memberships, abonnements et autres comptes de notre communauté</strong> afin de faciliter l'accès aux billetteries de clubs auxquels nous n’avons pas forcément accès par nos propres moyens.</p>
+      <p>Si tu disposes d’un accès pouvant offrir des avantages en billetterie, n’hésite pas à le renseigner via ce formulaire !</p>
+      <p>🎟️ En contrepartie, une compensation sera prévue pour chaque billet acheté grâce à ton accès. Le montant sera défini ensemble en privé, afin de contribuer à amortir le coût de ton abonnement ou membership.</p>
+      <p>Merci à tous ceux qui participeront à cette initiative.</p>
     </div>
 
     <hr class="section-divider">
     <div class="help-section-title">Contact</div>
     <label for="helpName">Nom / Prénom</label>
-    <input type="text" id="helpName" placeholder="Ton nom et prénom" oninput="checkHelpForm()">
+    <input type="text" id="helpName" placeholder="Nom et prénom" oninput="checkHelpForm()">
     <label for="helpInstagram">Pseudo Instagram</label>
     <input type="text" id="helpInstagram" placeholder="@tonpseudo" oninput="checkHelpForm()">
 
     <hr class="section-divider">
     <div class="help-section-title">ACCES BILLETTERIE</div>
-    <p style="font-size:13px;color:#666;line-height:1.5;">Tu peux proposer tes accès ci-dessous. Tu as la possibilité d'en ajouter plusieurs</p>
+    <p style="font-size:13px;color:#666;line-height:1.5;">Tu as la possibilité de partager un ou plusieurs accès privilégiés, afin d'en faire profiter à d'autres </p>
     <div id="accessRows"></div>
     <button type="button" class="add-access-btn" onclick="ajouterAcces()">+ Ajouter</button>
     <div id="helpError" style="display:none;margin-top:18px;padding:14px;background:#fce8e6;border-radius:6px;color:#c62828;text-align:center;"></div>
     <div class="help-actions">
-      <button type="button" id="btnSubmitHelp" onclick="envoyerAcces()" disabled>Envoyer mes accès</button>
-      <button type="button" class="secondary-btn" onclick="retourAccueil()">Retour à l'accueil</button>
+      <button type="button" id="btnSubmitHelp" onclick="envoyerAcces()" disabled>Envoyer</button>
+      <button type="button" class="secondary-btn" onclick="retourAccueil()">Accueil</button>
     </div>
     <div class="help-note">Tes informations seront utilisées uniquement pour gérer les accès partagés au sein de la communauté. Nous te recontacterons si besoin.</div>
   </div>
@@ -897,7 +895,7 @@ function loadMatchs() {
       row.appendChild(clubWrap);
 
       var remarques = document.createElement('textarea');
-      remarques.placeholder = 'Nombre de place(s) possible(s), Date de fin de validité, Loyalty Points...';
+      remarques.placeholder = 'Nombre de place(s) possible(s), fin de validité, loyalty points...';
       remarques.dataset.field = 'remarques';
       row.appendChild(field('Remarques (facultatif)', remarques, 'remarks-field'));
 
