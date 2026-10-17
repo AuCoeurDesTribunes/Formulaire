@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ma demande de billet</title>
+  <title>Au Cœur des Tribunes</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -219,10 +219,72 @@
     .custom-select-option .name {
       flex: 1;
     }
+    .recap-card {
+      display: none;
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .home-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:24px; }
+    .home-option { width:100%; min-height:150px; margin:0; background:#292929; color:#fff; border:1px solid #292929; border-radius:14px; padding:22px 16px; cursor:pointer; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,.10); transition:transform .15s, box-shadow .15s; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .home-option:hover { transform:translateY(-2px); background:#414141; box-shadow:0 5px 16px rgba(0,0,0,.16); }
+    .home-option .emoji { font-size:28px; display:block; margin-bottom:12px; line-height:1.2; }
+    .home-option strong { display:block; font-size:17px; color:#fff; margin-bottom:8px; }
+    .home-option span:last-child { display:block; color:#eee; font-size:13px; line-height:1.5; }
+    .home-intro { text-align:center; color:#555; line-height:1.6; margin:10px 0 20px; }
+    .help-card { display:none; background:white; border-radius:10px; padding:26px; box-shadow:0 2px 10px rgba(0,0,0,.1); }
+    .help-explanation { color:#444; font-size:14px; line-height:1.7; }
+    .help-explanation p { margin:10px 0; }
+    .help-explanation strong { color:#222; }
+    .help-section-title { font-size:13px; color:#1565C0; text-transform:uppercase; letter-spacing:.5px; margin:25px 0 0; font-weight:bold; }
+    .access-row { display:grid; grid-template-columns: .7fr 1.25fr 1.35fr 1.5fr; gap:9px; align-items:start; padding:14px 0; border-bottom:1px solid #eee; }
+    .access-row .field label { margin-top:0; font-size:12px; }
+    .access-row input, .access-row select, .access-row textarea { margin-top:6px; padding:9px 8px; font-size:13px; min-width:0; }
+    .access-row .remarks-field { grid-column:1 / -1; }
+    .access-row .remarks-field textarea { min-height:54px; }
+    .access-row .remove-access { grid-column:1 / -1; justify-self:end; width:auto; margin:0; padding:6px 10px; background:#fce8e6; color:#a52714; font-size:12px; }
+    .add-access-btn { width:auto; margin-top:16px; padding:10px 14px; background:#e8f0fe; color:#174ea6; border:1px solid #d2e3fc; }
+    .add-access-btn:hover { background:#dbe7fb; }
+    .secondary-btn { width:auto; margin-top:14px; background:#666; }
+    .help-actions { display:flex; gap:10px; align-items:stretch; margin-top:22px; }
+    .help-actions button { flex:1; width:0; min-height:48px; margin:0; padding:12px 10px; display:flex; align-items:center; justify-content:center; line-height:1.25; }
+    .help-note { font-size:12px; color:#777; line-height:1.5; margin-top:14px; }
+    @media (max-width:650px) {
+      .home-grid { grid-template-columns:1fr; }
+      .access-row { grid-template-columns:1fr 1fr; }
+      .access-row .remarks-field { grid-column:1 / -1; }
+      .help-card { padding:20px; }
+      .help-actions { flex-direction:column; }
+      .help-actions button { width:100%; }
+    }
+
   </style>
 </head>
 <body>
-  <div class="card">
+
+
+  <div class="card" id="homeCard">
+    <img src="https://lh3.googleusercontent.com/a/ACg8ocJ2hyWT-Cpq-XEg-oIX9msJIimG3dPKIvHyIYa7hZZb9P5cUGg=s360-c-no" alt="Au Coeur des Tribunes" class="logo">
+    <h2>Au Cœur des Tribunes</h2>
+    <p class="home-intro">Bienvenue ! Que souhaites-tu faire aujourd'hui ?</p>
+    <div class="home-grid">
+      <button type="button" class="home-option" onclick="ouvrirDemandes()">
+        <span class="emoji">🎟️</span>
+        <strong>Demandes de billets</strong>
+        <span>Je souhaite formuler mon intérêt pour un match.</span>
+      </button>
+      <button type="button" class="home-option" onclick="ouvrirAide()">
+        <span class="emoji">🤝</span>
+        <strong>Aider la communauté</strong>
+        <span>J'ai des abonnements ou des accès billetterie à partager.</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="card" id="mainCard" style="display:none;">
 
     <img src="https://lh3.googleusercontent.com/a/ACg8ocJ2hyWT-Cpq-XEg-oIX9msJIimG3dPKIvHyIYa7hZZb9P5cUGg=s360-c-no" alt="Au Coeur des Tribunes" class="logo">
 
@@ -237,7 +299,7 @@
 
     <label>Championnat</label>
     <div class="custom-select" id="customChampionnat">
-      <div class="custom-select-selected" id="selectedLabel">
+      <div class="custom-select-selected" id="selectedLabel" onclick="toggleDropdown()">
         <span id="selectedText">-- Choisir un championnat --</span>
         <span class="arrow">&#9660;</span>
       </div>
@@ -257,7 +319,7 @@
           <input type="text" id="autreExterieur" placeholder="Ex : Barcelone" oninput="checkForm()">
         </div>
       </div>
-      <label>&#128197; Date souhait&#233;e</label>
+      <label>&#128197; Date du match</label>
       <input type="text" id="autreDate" placeholder="JJ/MM/AAAA" maxlength="10" oninput="formatDate(this); checkForm()">
     </div>
 
@@ -314,7 +376,6 @@
     <button id="btnValider" onclick="valider()" disabled>Envoyer ma demande</button>
     <p style="text-align:center;font-size:12px;color:#888;margin-top:10px;">&#9888;&#65039; 3 demandes maximum par club</p>
 
-    <div id="confirmation"></div>
     <div id="erreur"></div>
 
     <div class="info-bottom">
@@ -323,8 +384,64 @@
 
   </div>
 
+  <div class="recap-card" id="recapCard">
+    <img src="https://lh3.googleusercontent.com/a/ACg8ocJ2hyWT-Cpq-XEg-oIX9msJIimG3dPKIvHyIYa7hZZb9P5cUGg=s360-c-no" style="width:70px;height:70px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 16px auto;">
+    <div id="recapContenu" style="color:#2d7a3a;line-height:1.8;"></div>
+    <br>
+    <button onclick="nouvelleDemandeande()" style="background:#1565C0;color:white;border:none;padding:10px 20px;border-radius:6px;font-size:14px;cursor:pointer;width:auto;margin-top:0;">
+      &#43; Effectuer une autre demande
+    </button>
+    <button onclick="retourAccueil()" style="background:#666;color:white;border:none;padding:10px 20px;border-radius:6px;font-size:14px;cursor:pointer;width:auto;margin-top:10px;">
+      Retour à l'accueil
+    </button>
+  </div>
+
+  <div class="help-card" id="helpCard">
+    <img src="https://lh3.googleusercontent.com/a/ACg8ocJ2hyWT-Cpq-XEg-oIX9msJIimG3dPKIvHyIYa7hZZb9P5cUGg=s360-c-no" alt="Au Coeur des Tribunes" class="logo">
+    <h2>Aider la communauté</h2>
+    <div class="help-explanation">
+      <p><strong>🤝 Partageons nos accès billetterie !</strong></p>
+      <p>L’objectif est simple : <strong>mettre en commun les memberships, abonnements et autres statuts de notre communauté</strong> afin de permettre au plus grand nombre d’accéder à des billetteries de clubs auxquels nous n’avons pas forcément accès par nos propres moyens.</p>
+      <p>Si tu disposes d’un abonnement, d’un membership ou de tout autre statut donnant accès à une billetterie ou à des avantages particuliers, nous t’invitons à le renseigner via ce formulaire. Chaque accès partagé peut permettre à d’autres membres de la communauté d’obtenir des billets plus facilement !</p>
+      <p><strong>🎟️ Une contrepartie pour les membres participants</strong></p>
+      <p>Pour remercier les titulaires qui mettent leurs accès à disposition, une compensation financière sera prévue pour chaque billet acheté grâce à leur accès. Le montant sera défini directement avec chaque personne, afin de contribuer à amortir le coût de l’abonnement ou du membership.</p>
+      <p>Le principe est simple : <strong>plus nous mutualisons nos accès, plus nous multiplions les possibilités pour tous !</strong></p>
+      <p>Merci à tous ceux qui participeront à cette initiative et contribueront à faire grandir la communauté.</p>
+    </div>
+
+    <hr class="section-divider">
+    <div class="help-section-title">Contact</div>
+    <label for="helpName">Nom / Prénom</label>
+    <input type="text" id="helpName" placeholder="Ton nom et prénom" oninput="checkHelpForm()">
+    <label for="helpInstagram">Pseudo Instagram</label>
+    <input type="text" id="helpInstagram" placeholder="@tonpseudo" oninput="checkHelpForm()">
+
+    <hr class="section-divider">
+    <div class="help-section-title">ACCES BILLETTERIE</div>
+    <p style="font-size:13px;color:#666;line-height:1.5;">Tu peux proposer tes accès ci-dessous. Tu as la possibilité d'en ajouter plusieurs</p>
+    <div id="accessRows"></div>
+    <button type="button" class="add-access-btn" onclick="ajouterAcces()">+ Ajouter</button>
+    <div id="helpError" style="display:none;margin-top:18px;padding:14px;background:#fce8e6;border-radius:6px;color:#c62828;text-align:center;"></div>
+    <div class="help-actions">
+      <button type="button" id="btnSubmitHelp" onclick="envoyerAcces()" disabled>Envoyer mes accès</button>
+      <button type="button" class="secondary-btn" onclick="retourAccueil()">Retour à l'accueil</button>
+    </div>
+    <div class="help-note">Tes informations seront utilisées uniquement pour gérer les accès partagés au sein de la communauté. Nous te recontacterons si besoin.</div>
+  </div>
+
+  <div class="recap-card" id="helpRecapCard">
+    <img src="https://lh3.googleusercontent.com/a/ACg8ocJ2hyWT-Cpq-XEg-oIX9msJIimG3dPKIvHyIYa7hZZb9P5cUGg=s360-c-no" style="width:70px;height:70px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 16px auto;">
+    <div style="color:#2d7a3a;line-height:1.8;">
+      <strong>✅ Merci pour ta contribution !</strong><br><br>
+      Tes accès ont bien été enregistrés. Grâce à toi, la communauté pourra bénéficier de nouvelles possibilités pour accéder aux billetteries.<br><br>
+      Nous n’hésiterons pas à te recontacter si nous avons besoin de précisions ou pour organiser l’utilisation de tes accès.
+    </div>
+    <button onclick="nouveauFormulaireAcces()" style="background:#1565C0;color:white;border:none;padding:10px 20px;border-radius:6px;font-size:14px;cursor:pointer;width:auto;margin-top:20px;">＋ Ajouter d'autres accès</button>
+    <button onclick="retourAccueil()" style="background:#666;color:white;border:none;padding:10px 20px;border-radius:6px;font-size:14px;cursor:pointer;width:auto;margin-top:10px;">Retour à l'accueil</button>
+  </div>
+
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3xmpGN4g0IglymylArdHl64fuOVXsV_xtsJkk8gyqlO_CAWrrgxnlothRNEAP7vHq/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwcomK1ioa_1LVeGKOevsQ9__fVvGwYUJ8uY76-NIwIsJRmdXzM9zh18wrTK0AMKD-/exec';
 
     const MESSAGES_CLUBS = {
       'Manchester United': '&#128241; Bon &#224; savoir : pour ce match, le transfert de billets n&#233;cessite un appareil Android. Merci de le pr&#233;ciser si cela pose un probl&#232;me.',
@@ -332,62 +449,45 @@
     };
 
     const CHAMPIONNATS_FLAGS = {
-      'Premier League': 'https://flagcdn.com/24x18/gb-eng.png',
-      'Ligue 1': 'https://flagcdn.com/24x18/fr.png',
-      'Liga': 'https://flagcdn.com/24x18/es.png',
-      'Serie A': 'https://flagcdn.com/24x18/it.png',
-      'Bundesliga': 'https://flagcdn.com/24x18/de.png'
-    };
+  'Premier League': 'https://flagcdn.com/24x18/gb-eng.png',
+  'Ligue 1': 'https://flagcdn.com/24x18/fr.png',
+  'Liga': 'https://flagcdn.com/24x18/es.png',
+  'Serie A': 'https://flagcdn.com/24x18/it.png',
+  'Bundesliga': 'https://flagcdn.com/24x18/de.png',
+  'Ligue des Champions': 'https://flagcdn.com/24x18/eu.png'
+};
 
-    var dropdownOpen = false;
 
-    function callScript(action, params) {
-      return fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify(Object.assign({ action: action }, params))
-      }).then(function(r) { return r.json(); });
-    }
+    const CHAMPIONNATS = ['Bundesliga', 'Liga', 'Ligue 1', 'Ligue des Champions', 'Premier League', 'Serie A'];
 
-    callScript('getChampionnats').then(function(championnats) {
+
+    // Remplissage immédiat de la liste des championnats
+    (function() {
       const options = document.getElementById('customOptions');
-
-      championnats.forEach(function(c) {
+      CHAMPIONNATS.forEach(function(c) {
         const flagUrl = CHAMPIONNATS_FLAGS[c] || '';
         const div = document.createElement('div');
         div.className = 'custom-select-option';
         div.innerHTML = (flagUrl ? '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;flex-shrink:0;">' : '') + '<span class="name">' + c + '</span>';
-        div.addEventListener('mousedown', function(e) {
-          e.preventDefault();
-          selectChampionnat(c, (flagUrl ? '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:8px;">' : '') + c);
-        });
+        div.onclick = function() { selectChampionnat(c, (flagUrl ? '<img src="' + flagUrl + '" style="width:24px;height:18px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:8px;">' : '') + c); };
         options.appendChild(div);
       });
-
       const divAutre = document.createElement('div');
       divAutre.className = 'custom-select-option';
       divAutre.innerHTML = '<span style="width:24px;text-align:center;">&#127942;</span><span class="name">Autre championnat ou coupe</span>';
-      divAutre.addEventListener('mousedown', function(e) {
-        e.preventDefault();
-        selectChampionnat('Autre', '&#127942; Autre championnat ou coupe');
-      });
+      divAutre.onclick = function() { selectChampionnat('Autre', '&#127942; Autre championnat ou coupe'); };
       options.appendChild(divAutre);
+    })();
 
-    }).catch(function(err) {
-      console.log('Erreur : ' + err);
-    });
-
-    document.getElementById('selectedLabel').addEventListener('mousedown', function(e) {
-      e.stopPropagation();
+    function toggleDropdown() {
       const opts = document.getElementById('customOptions');
-      dropdownOpen = !dropdownOpen;
-      opts.style.display = dropdownOpen ? 'block' : 'none';
-    });
+      opts.style.display = opts.style.display === 'none' ? 'block' : 'none';
+    }
 
-    document.addEventListener('mousedown', function(e) {
+    document.addEventListener('click', function(e) {
       const container = document.getElementById('customChampionnat');
       if (!container.contains(e.target)) {
         document.getElementById('customOptions').style.display = 'none';
-        dropdownOpen = false;
       }
     });
 
@@ -395,9 +495,34 @@
       document.getElementById('championnat').value = value;
       document.getElementById('selectedText').innerHTML = label;
       document.getElementById('customOptions').style.display = 'none';
-      dropdownOpen = false;
       loadJournees();
     }
+
+    function callScript(action, params, tentative) {
+  tentative = tentative || 1;
+  return fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify(Object.assign({ action: action }, params))
+  }).then(function(r) {
+    return r.text(); // on lit en texte d'abord
+  }).then(function(text) {
+    try {
+      return JSON.parse(text); // puis on parse
+    } catch(e) {
+      console.log('Réponse brute : ' + text);
+      return text; // si pas du JSON valide on retourne le texte
+    }
+  }).catch(function(err) {
+    if (tentative < 3) {
+      return new Promise(function(resolve) {
+        setTimeout(function() {
+          resolve(callScript(action, params, tentative + 1));
+        }, 2000);
+      });
+    }
+    throw err;
+  });
+}
 
     function formatDate(input) {
       let v = input.value.replace(/\D/g, '');
@@ -407,83 +532,107 @@
     }
 
     function loadJournees() {
-      const champ = document.getElementById('championnat').value;
-      const selJ = document.getElementById('journee');
-      const selM = document.getElementById('match');
-      const sectionJournee = document.getElementById('sectionJournee');
-      const champAutre = document.getElementById('champAutre');
-      const infoClub = document.getElementById('infoClub');
+  const champ = document.getElementById('championnat').value;
+  const selJ = document.getElementById('journee');
+  const selM = document.getElementById('match');
+  const sectionJournee = document.getElementById('sectionJournee');
+  const champAutre = document.getElementById('champAutre');
+  const infoClub = document.getElementById('infoClub');
 
-      infoClub.style.display = 'none';
-      infoClub.innerHTML = '';
+  infoClub.style.display = 'none';
+  infoClub.innerHTML = '';
 
-      if (champ === 'Autre') {
-        sectionJournee.style.display = 'none';
-        champAutre.style.display = 'block';
-        checkForm();
-        return;
-      }
+  if (champ === 'Autre') {
+    sectionJournee.style.display = 'none';
+    champAutre.style.display = 'block';
+    checkForm();
+    return;
+  }
 
-      sectionJournee.style.display = 'block';
-      champAutre.style.display = 'none';
-      selJ.innerHTML = '<option value="">Chargement...</option>';
-      selJ.disabled = true;
-      selM.innerHTML = '<option value="">-- Choisir un match --</option>';
-      selM.disabled = true;
-      checkForm();
+  sectionJournee.style.display = 'block';
+  champAutre.style.display = 'none';
+  checkForm();
 
-      if (!champ) return;
+  // Nombre de journées selon le championnat
+  const nbJournees = {
+  'Premier League': 38,
+  'Serie A': 38,
+  'Liga': 38,
+  'Ligue 1': 34,
+  'Bundesliga': 34,
+  'Ligue des Champions': 8
+};
 
-      callScript('getJournees', { championnat: champ }).then(function(journees) {
-        selJ.innerHTML = '<option value="">-- Choisir une journ\u00e9e --</option>';
-        journees.forEach(function(j) {
-          const opt = document.createElement('option');
-          opt.value = j;
-          const num = j.toString().replace(/\D/g, '');
-          opt.textContent = 'Journ\u00e9e ' + num;
-          selJ.appendChild(opt);
-        });
-        selJ.disabled = false;
-      }).catch(function() {
-        selJ.innerHTML = '<option value="">Erreur</option>';
-      });
+
+  const nb = nbJournees[champ] || 38;
+
+  selJ.innerHTML = '<option value="">-- Choisir une journ\u00e9e --</option>';
+  for (var i = 1; i <= nb; i++) {
+    const opt = document.createElement('option');
+    opt.value = 'J' + i;
+    opt.textContent = 'Journ\u00e9e ' + i;
+    selJ.appendChild(opt);
+  }
+  selJ.disabled = false;
+
+  selM.innerHTML = '<option value="">-- Choisir un match --</option>';
+  selM.disabled = true;
+}
+
+function loadMatchs() {
+  const champ = document.getElementById('championnat').value;
+  const journee = document.getElementById('journee').value;
+  const selM = document.getElementById('match');
+  const infoClub = document.getElementById('infoClub');
+
+  infoClub.style.display = 'none';
+  infoClub.innerHTML = '';
+  document.getElementById('dateMatch').value = '';
+  selM.innerHTML = '<option value="">&#9203; Chargement des matchs...</option>';
+  selM.disabled = true;
+  checkForm();
+
+  if (!journee) return;
+
+  // Timeout de sécurité — si pas de réponse après 15s, propose de réessayer
+  const timeout = setTimeout(function() {
+    if (selM.disabled) {
+      selM.innerHTML = '<option value="">&#10060; D\u00e9lai d\u00e9pass\u00e9 — Appuyez pour r\u00e9essayer</option>';
+      selM.disabled = false;
+      selM.addEventListener('click', function retryLoad() {
+        selM.removeEventListener('click', retryLoad);
+        loadMatchs();
+      }, { once: true });
     }
+  }, 15000);
 
-    function loadMatchs() {
-      const champ = document.getElementById('championnat').value;
-      const journee = document.getElementById('journee').value;
-      const selM = document.getElementById('match');
-      const infoClub = document.getElementById('infoClub');
-
-      infoClub.style.display = 'none';
-      infoClub.innerHTML = '';
-      document.getElementById('dateMatch').value = '';
-      selM.innerHTML = '<option value="">Chargement...</option>';
-      selM.disabled = true;
-      checkForm();
-
-      if (!journee) return;
-
-      callScript('getMatchs', { championnat: champ, journee: journee }).then(function(matchs) {
-        selM.innerHTML = '<option value="">-- Choisir un match --</option>';
-        if (matchs && matchs.length > 0) {
-          matchs.forEach(function(m) {
-            const opt = document.createElement('option');
-            opt.value = m.domicile + ' vs ' + m.exterieur;
-            opt.dataset.date = m.dateISO || '';
-            const dateStr = m.date ? ' \u2014 ' + new Date(m.date).toLocaleDateString('fr-FR') : '';
-            opt.textContent = m.domicile + ' vs ' + m.exterieur + dateStr;
-            selM.appendChild(opt);
-          });
-          selM.disabled = false;
-        } else {
-          selM.innerHTML = '<option value="">Aucun match trouv\u00e9</option>';
-        }
-        checkForm();
-      }).catch(function() {
-        selM.innerHTML = '<option value="">Erreur</option>';
+  callScript('getMatchs', { championnat: champ, journee: journee }).then(function(matchs) {
+    clearTimeout(timeout);
+    selM.innerHTML = '<option value="">-- Choisir un match --</option>';
+    if (matchs && Array.isArray(matchs) && matchs.length > 0) {
+      matchs.forEach(function(m) {
+        const opt = document.createElement('option');
+        opt.value = m.domicile + ' vs ' + m.exterieur;
+        opt.dataset.date = m.dateISO || '';
+        const dateStr = m.date ? ' \u2014 ' + new Date(m.date).toLocaleDateString('fr-FR') : '';
+        opt.textContent = m.domicile + ' vs ' + m.exterieur + dateStr;
+        selM.appendChild(opt);
       });
+      selM.disabled = false;
+    } else {
+      selM.innerHTML = '<option value="">Aucun match trouv\u00e9</option>';
     }
+    checkForm();
+  }).catch(function() {
+    clearTimeout(timeout);
+    selM.innerHTML = '<option value="">&#10060; Erreur — Touchez pour r\u00e9essayer</option>';
+    selM.disabled = false;
+    selM.addEventListener('click', function retryLoad() {
+      selM.removeEventListener('click', retryLoad);
+      loadMatchs();
+    }, { once: true });
+  });
+}
 
     function onMatchChange() {
       const matchSel = document.getElementById('match');
@@ -536,7 +685,8 @@
     }
 
     function nouvelleDemandeande() {
-      document.getElementById('confirmation').style.display = 'none';
+      document.getElementById('recapCard').style.display = 'none';
+      document.getElementById('mainCard').style.display = 'block';
       document.getElementById('selectedText').innerHTML = '-- Choisir un championnat --';
       document.getElementById('championnat').value = '';
       document.getElementById('dateMatch').value = '';
@@ -565,7 +715,6 @@
       const insta = document.getElementById('instagram').value.trim();
       const remarques = document.getElementById('remarques').value.trim();
       const btn = document.getElementById('btnValider');
-      const conf = document.getElementById('confirmation');
       const err = document.getElementById('erreur');
 
       const radios = document.querySelectorAll('input[name="coteCote"]');
@@ -583,7 +732,6 @@
         exterieur = document.getElementById('autreExterieur').value.trim();
         matchLabel = domicile + ' vs ' + exterieur;
         journeeLabel = '';
-        // Convertit JJ/MM/AAAA en ISO pour envoi
         const dateAutre = document.getElementById('autreDate').value.trim();
         const parts = dateAutre.split('/');
         if (parts.length === 3) {
@@ -622,16 +770,18 @@
           remarques: remarques
         }
       }).then(function(id) {
-        conf.style.display = 'block';
-        conf.innerHTML = '&#9989; Ta demande a bien &#233;t&#233; re&#231;ue !<br>'
+        document.getElementById('mainCard').style.display = 'none';
+        document.getElementById('recapContenu').innerHTML =
+          '&#9989; Ta demande a bien &#233;t&#233; re&#231;ue !<br>'
           + '<small style="color:#888;">R&#233;f&#233;rence : <strong>' + id + '</strong></small><br><br>'
           + '<strong>' + champ + ' &#8212; ' + journeeLabel + '</strong><br>'
           + '&#9917; ' + matchLabel + '<br>'
           + '&#127915; ' + nb + ' place(s)' + (coteCote !== 'N/A' ? ' &#8212; C&#244;te &#224; c&#244;te : ' + coteCote : '') + '<br>'
-          + '&#128248; ' + insta + '<br><br>'
-          + '<button onmousedown="nouvelleDemandeande()" style="background:#1565C0;color:white;border:none;padding:10px 20px;border-radius:6px;font-size:14px;cursor:pointer;width:auto;">&#43; Effectuer une autre demande</button>';
+          + '&#128248; ' + insta;
+        document.getElementById('recapCard').style.display = 'block';
         btn.textContent = 'Envoyer ma demande';
         btn.disabled = false;
+        window.scrollTo(0, 0);
       }).catch(function() {
         err.style.display = 'block';
         err.innerHTML = '&#10060; Erreur lors de l\'envoi. R&#233;essaie.';
@@ -639,3 +789,226 @@
         btn.disabled = false;
       });
     }
+
+    // --- Navigation entre les deux formulaires ---
+    function masquerToutesLesPages() {
+      ['homeCard','mainCard','recapCard','helpCard','helpRecapCard'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+    }
+    function ouvrirDemandes() {
+      masquerToutesLesPages();
+      document.getElementById('mainCard').style.display = 'block';
+      window.scrollTo(0,0);
+    }
+    function ouvrirAide() {
+      masquerToutesLesPages();
+      document.getElementById('helpCard').style.display = 'block';
+      if (!document.querySelector('.access-row')) ajouterAcces();
+      checkHelpForm();
+      window.scrollTo(0,0);
+    }
+    function retourAccueil() {
+      masquerToutesLesPages();
+      document.getElementById('homeCard').style.display = 'block';
+      window.scrollTo(0,0);
+    }
+
+    // Clubs de référence pour les championnats domestiques.
+    // Les listes peuvent être ajustées au fil des promotions/relégations.
+    const CLUBS_PAR_CHAMPIONNAT = {
+      'Premier League': [
+        'Arsenal','Aston Villa','Bournemouth','Brentford','Brighton & Hove Albion','Chelsea','Coventry City','Crystal Palace','Everton','Fulham','Hull City','Ipswich Town','Leeds United','Liverpool','Manchester City','Manchester United','Newcastle United','Nottingham Forest','Sunderland','Tottenham Hotspur'
+      ],
+      'Ligue 1': [
+        'Angers','Auxerre','Brest','Le Havre','Le Mans','Lens','Lille','Lorient','Lyon','Marseille','Monaco','Nice','Paris FC','Paris Saint-Germain','Rennes','Strasbourg','Toulouse','Troyes'
+      ],
+      'Liga': [
+        'Athletic Club','Atlético de Madrid','CA Osasuna','Celta Vigo','Deportivo Alavés','Elche CF','FC Barcelona','Getafe CF','Levante UD','Málaga CF','Racing de Santander','Rayo Vallecano','RC Deportivo','RCD Espanyol','Real Betis','Real Madrid','Real Sociedad','Sevilla FC','Valencia CF','Villarreal CF'
+      ],
+      'Serie A': [
+        'Atalanta','Bologna','Cagliari','Como','Cremonese','Fiorentina','Genoa','Inter','Juventus','Lazio','Lecce','Milan','Napoli','Parma','Pisa','Roma','Sassuolo','Torino','Udinese','Verona'
+      ],
+      'Bundesliga': [
+        'Augsburg','Bayer Leverkusen','Bayern Munich','Borussia Dortmund','Borussia Mönchengladbach','Eintracht Frankfurt','Freiburg','Hamburger SV','Heidenheim','Hoffenheim','Köln','Mainz 05','RB Leipzig','St. Pauli','Schalke 04','Union Berlin','Werder Bremen','Wolfsburg'
+      ]
+    };
+    let accessCounter = 0;
+
+    function creerChamp(options, placeholder) {
+      var select = document.createElement('select');
+      var first = document.createElement('option');
+      first.value = '';
+      first.textContent = placeholder;
+      first.hidden = true;
+      select.appendChild(first);
+      options.forEach(function(value) {
+        var opt = document.createElement('option');
+        opt.value = value;
+        opt.textContent = value;
+        select.appendChild(opt);
+      });
+      return select;
+    }
+
+    function ajouterAcces() {
+      accessCounter++;
+      var id = accessCounter;
+      var row = document.createElement('div');
+      row.className = 'access-row';
+      row.dataset.accessId = id;
+
+      function field(labelText, control, className) {
+        var wrap = document.createElement('div');
+        wrap.className = 'field' + (className ? ' ' + className : '');
+        var label = document.createElement('label');
+        label.textContent = labelText;
+        wrap.appendChild(label);
+        wrap.appendChild(control);
+        return wrap;
+      }
+
+      var nombre = creerChamp(['1','2','3','4','5','6','7','8','9','10 ou plus'], 'Nombre');
+      nombre.dataset.field = 'nombre';
+      nombre.addEventListener('change', checkHelpForm);
+
+      var type = creerChamp(['Abonnement','Membership',"Historique d'achat",'Autre'], 'Type d’accès');
+      type.dataset.field = 'type';
+      type.addEventListener('change', checkHelpForm);
+
+      var championnat = creerChamp(['Premier League','Ligue 1','Liga','Serie A','Bundesliga','Autre championnat'], 'Championnat');
+      championnat.dataset.field = 'championnat';
+      championnat.addEventListener('change', function() { mettreAJourClub(row); checkHelpForm(); });
+
+      var clubWrap = document.createElement('div');
+      clubWrap.className = 'field club-field';
+      var clubLabel = document.createElement('label');
+      clubLabel.textContent = 'Club';
+      clubWrap.appendChild(clubLabel);
+      var club = creerChamp([], 'Choisir un club');
+      club.dataset.field = 'club';
+      club.disabled = true;
+      club.addEventListener('change', checkHelpForm);
+      clubWrap.appendChild(club);
+
+      row.appendChild(field('Nombre', nombre));
+      row.appendChild(field('Type', type));
+      row.appendChild(field('Championnat', championnat));
+      row.appendChild(clubWrap);
+
+      var remarques = document.createElement('textarea');
+      remarques.placeholder = 'Remarques (facultatif)';
+      remarques.dataset.field = 'remarques';
+      row.appendChild(field('Remarques (facultatif)', remarques, 'remarks-field'));
+
+      var remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'remove-access';
+      remove.textContent = 'Retirer';
+      remove.onclick = function() {
+        var rows = document.querySelectorAll('.access-row');
+        if (rows.length > 1) row.remove();
+        else {
+          nombre.value = ''; type.value = ''; championnat.value = '';
+          mettreAJourClub(row); remarques.value = '';
+        }
+        checkHelpForm();
+      };
+      row.appendChild(remove);
+
+      document.getElementById('accessRows').appendChild(row);
+      checkHelpForm();
+    }
+
+    function mettreAJourClub(row) {
+      var championnat = row.querySelector('[data-field="championnat"]').value;
+      var old = row.querySelector('[data-field="club"]');
+      var wrap = old.parentNode;
+      var newClub;
+      if (championnat === 'Autre championnat') {
+        newClub = document.createElement('input');
+        newClub.type = 'text';
+        newClub.placeholder = 'Nom du club';
+        newClub.dataset.field = 'club';
+        newClub.addEventListener('input', checkHelpForm);
+      } else {
+        newClub = creerChamp(CLUBS_PAR_CHAMPIONNAT[championnat] || [], 'Choisir un club');
+        newClub.dataset.field = 'club';
+        newClub.disabled = !championnat;
+        newClub.addEventListener('change', checkHelpForm);
+      }
+      wrap.replaceChild(newClub, old);
+    }
+
+    function checkHelpForm() {
+      var name = document.getElementById('helpName').value.trim();
+      var insta = document.getElementById('helpInstagram').value.trim();
+      var rows = Array.from(document.querySelectorAll('.access-row'));
+      var rowsValid = rows.length > 0 && rows.every(function(row) {
+        return !!row.querySelector('[data-field="nombre"]').value &&
+          !!row.querySelector('[data-field="type"]').value &&
+          !!row.querySelector('[data-field="championnat"]').value &&
+          !!row.querySelector('[data-field="club"]').value.trim();
+      });
+      document.getElementById('btnSubmitHelp').disabled = !(name && insta && rowsValid);
+    }
+
+    function envoyerAcces() {
+      var btn = document.getElementById('btnSubmitHelp');
+      var error = document.getElementById('helpError');
+      var name = document.getElementById('helpName').value.trim();
+      var insta = document.getElementById('helpInstagram').value.trim();
+      var rows = Array.from(document.querySelectorAll('.access-row'));
+      var acces = rows.map(function(row) {
+        return {
+          nombre: row.querySelector('[data-field="nombre"]').value,
+          type: row.querySelector('[data-field="type"]').value,
+          championnat: row.querySelector('[data-field="championnat"]').value,
+          club: row.querySelector('[data-field="club"]').value.trim(),
+          remarques: row.querySelector('[data-field="remarques"]').value.trim()
+        };
+      });
+
+      if (!name || !insta || !acces.length || acces.some(function(a) {
+        return !a.nombre || !a.type || !a.championnat || !a.club;
+      })) {
+        error.textContent = 'Merci de renseigner les coordonnées et tous les champs obligatoires de chaque accès.';
+        error.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Envoi en cours...';
+      error.style.display = 'none';
+
+      callScript('enregistrerMemberships', {
+        data: { nomPrenom: name, instagram: insta, acces: acces }
+      }).then(function(result) {
+        if (!result || result.status !== 'ok') throw new Error('Réponse inattendue du serveur');
+        masquerToutesLesPages();
+        document.getElementById('helpRecapCard').style.display = 'block';
+        window.scrollTo(0,0);
+      }).catch(function(err) {
+        console.error(err);
+        error.textContent = "Une erreur est survenue lors de l'envoi. Vérifie ta connexion puis réessaie.";
+        error.style.display = 'block';
+      }).finally(function() {
+        btn.textContent = 'Envoyer mes accès';
+        checkHelpForm();
+      });
+    }
+
+    function nouveauFormulaireAcces() {
+      document.getElementById('helpName').value = '';
+      document.getElementById('helpInstagram').value = '';
+      document.getElementById('accessRows').innerHTML = '';
+      document.getElementById('helpError').style.display = 'none';
+      accessCounter = 0;
+      ajouterAcces();
+      ouvrirAide();
+    }
+
+  </script>
+</body>
+</html>
