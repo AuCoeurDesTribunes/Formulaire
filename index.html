@@ -818,19 +818,19 @@ function loadMatchs() {
     // Les listes peuvent être ajustées au fil des promotions/relégations.
     const CLUBS_PAR_CHAMPIONNAT = {
       'Premier League': [
-        'Arsenal','Aston Villa','Bournemouth','Brentford','Brighton & Hove Albion','Chelsea','Coventry City','Crystal Palace','Everton','Fulham','Hull City','Ipswich Town','Leeds United','Liverpool','Manchester City','Manchester United','Newcastle United','Nottingham Forest','Sunderland','Tottenham Hotspur'
+        'Arsenal','Aston Villa','Bournemouth','Brentford','Brighton','Chelsea','Coventry','Crystal Palace','Everton','Fulham','Hull City','Ipswich','Leeds','Liverpool','Manchester City','Manchester United','Newcastle','Nottingham Forest','Sunderland','Tottenham'
       ],
       'Ligue 1': [
-        'Angers','Auxerre','Brest','Le Havre','Le Mans','Lens','Lille','Lorient','Lyon','Marseille','Monaco','Nice','Paris FC','Paris Saint-Germain','Rennes','Strasbourg','Toulouse','Troyes'
+        'Angers','Auxerre','Brest','Le Havre','Le Mans','Lens','Lille','Lorient','Lyon','Marseille','Monaco','Nice','Paris FC','PSG','Rennes','Strasbourg','Toulouse','Troyes'
       ],
       'Liga': [
-        'Athletic Club','Atlético de Madrid','CA Osasuna','Celta Vigo','Deportivo Alavés','Elche CF','FC Barcelona','Getafe CF','Levante UD','Málaga CF','Racing de Santander','Rayo Vallecano','RC Deportivo','RCD Espanyol','Real Betis','Real Madrid','Real Sociedad','Sevilla FC','Valencia CF','Villarreal CF'
+        'Athletic Club','Atlético Madrid','Osasuna','Celta Vigo','Alavés','Elche','FC Barcelona','Getafe','Levante','Málaga','Santander','Rayo Vallecano','Deportivo','Espanyol','Real Betis','Real Madrid','Real Sociedad','Seville','Valence','Villarreal'
       ],
       'Serie A': [
-        'Atalanta','Bologna','Cagliari','Como','Cremonese','Fiorentina','Genoa','Inter','Juventus','Lazio','Lecce','Milan','Napoli','Parma','Pisa','Roma','Sassuolo','Torino','Udinese','Verona'
+        'Atalanta','Bologne','Cagliari','Côme','Cremonese','Fiorentina','Genoa','Inter','Juventus','Lazio','Lecce','Milan','Napoli','Parma','Pisa','Roma','Sassuolo','Torino','Udinese','Verone'
       ],
       'Bundesliga': [
-        'Augsburg','Bayer Leverkusen','Bayern Munich','Borussia Dortmund','Borussia Mönchengladbach','Eintracht Frankfurt','Freiburg','Hamburger SV','Heidenheim','Hoffenheim','Köln','Mainz 05','RB Leipzig','St. Pauli','Schalke 04','Union Berlin','Werder Bremen','Wolfsburg'
+        'Augsburg','Bayer Leverkusen','Bayern Munich','Borussia Dortmund','Borussia Mönchengladbach','Eintracht Francfort','Fribourg','Hambourg','Heidenheim','Hoffenheim','Cologne','Mayence','RB Leipzig','St Pauli','Schalke 04','Union Berlin','Werder Breme','Wolfsburg'
       ]
     };
     let accessCounter = 0;
@@ -868,11 +868,11 @@ function loadMatchs() {
         return wrap;
       }
 
-      var nombre = creerChamp(['1','2','3','4','5','6','7','8','9','10 ou plus'], 'Nombre');
+      var nombre = creerChamp(['1','2','3','4','5','6','7','8','9','10 ou plus'], 'Nb');
       nombre.dataset.field = 'nombre';
       nombre.addEventListener('change', checkHelpForm);
 
-      var type = creerChamp(['Abonnement','Membership',"Historique d'achat",'Autre'], 'Type d’accès');
+      var type = creerChamp(['Abonnement','Membership',"Historique d'achat",'Autre'], 'Type');
       type.dataset.field = 'type';
       type.addEventListener('change', checkHelpForm);
 
@@ -972,7 +972,7 @@ function loadMatchs() {
       if (!name || !insta || !acces.length || acces.some(function(a) {
         return !a.nombre || !a.type || !a.championnat || !a.club;
       })) {
-        error.textContent = 'Merci de renseigner les coordonnées et tous les champs obligatoires de chaque accès.';
+        error.textContent = 'Merci de renseigner les coordonnées et tous les champs obligatoires.';
         error.style.display = 'block';
         return;
       }
@@ -990,10 +990,10 @@ function loadMatchs() {
         window.scrollTo(0,0);
       }).catch(function(err) {
         console.error(err);
-        error.textContent = "Une erreur est survenue lors de l'envoi. Vérifie ta connexion puis réessaie.";
+        error.textContent = "Une erreur est survenue lors de l'envoi. Vérifier la connexion et réessayer.";
         error.style.display = 'block';
       }).finally(function() {
-        btn.textContent = 'Envoyer mes accès';
+        btn.textContent = 'Envoyer';
         checkHelpForm();
       });
     }
