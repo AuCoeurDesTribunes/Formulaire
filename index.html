@@ -126,15 +126,15 @@
       width: 100%;
       margin-top: 30px;
       padding: 13px;
-      background: #222222;
-      color: #FFFFFF;
+      background: #4285F4;
+      color: white;
       border: none;
       border-radius: 6px;
       font-size: 16px;
       cursor: pointer;
       font-weight: bold;
     }
-    button:hover { background: #444444; }
+    button:hover { background: #3367D6; }
     button:disabled { background: #bbb; cursor: not-allowed; }
     #confirmation {
       display: none;
@@ -228,8 +228,8 @@
       text-align: center;
     }
 
-    .home-grid { display:grid; grid-template-columns:1fr; gap:14px; margin-top:18px; }
-   .home-option { display: grid; grid-template-columns: 110px 1fr; grid-template-rows: auto auto; align-items: center; column-gap: 18px; width: 100%; min-height: 130px; padding: 16px 20px; background: #FFFFFF; color: #222222; border: 1px solid #D6D6D6; border-radius: 10px; box-shadow: none; text-align: left; cursor: pointer;}
+    .home-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:24px; }
+    .home-option { width:100%; min-height:150px; margin:0; background:#292929; color:#fff; border:1px solid #292929; border-radius:14px; padding:22px 16px; cursor:pointer; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,.10); transition:transform .15s, box-shadow .15s; display:flex; flex-direction:column; align-items:center; justify-content:center; }
     .home-option:hover { transform:translateY(-2px); background:#414141; box-shadow:0 5px 16px rgba(0,0,0,.16); }
     .home-option .emoji { font-size:28px; display:block; margin-bottom:12px; line-height:1.2; }
     .home-option strong { display:block; font-size:17px; color:#fff; margin-bottom:8px; }
@@ -263,27 +263,27 @@
 
 
     /* Identité visuelle Au Cœur des Tribunes */
-    body { max-width: 760px; margin: 0 auto; padding: 16px; background:#F2F2F2;color:#222222;}
-    .card, .help-card, .recap-card {     border-radius:10px; box-shadow:none; }
+    body { max-width: 760px; margin: 0 auto; padding: 16px; background:#F4F0EA; color:#292622; }
+    .card, .help-card, .recap-card { border-radius:16px; box-shadow:0 4px 18px rgba(41,38,34,.07); }
     h2 { color:#292622; }
-    .section-title, .help-section-title { color:#333333; }
+    .section-title, .help-section-title { color:#A74742; }
     button { background:#A74742; }
     button:hover { background:#873733; }
     button:disabled { background:#c9c1b8; color:#fff; }
     .home-card-wrap { padding:0; overflow:hidden; background:transparent; box-shadow:none; }
-    .site-header { position:sticky; top:0; z-index:500; margin:-16px -16px 18px; padding:10px 12px; background:#F2F2F2; border-bottom:1px solid #D6D6D6;}
+    .site-header { position:sticky; top:0; z-index:500; margin:-16px -16px 18px; padding:10px 12px; background:rgba(244,240,234,.96); backdrop-filter:blur(10px); border-bottom:1px solid #DED6CC; }
     .site-brand { display:flex; align-items:center; justify-content:center; gap:9px; margin-bottom:8px; font-weight:800; letter-spacing:.04em; font-size:15px; color:#292622; }
     .site-brand img { width:30px; height:30px; border-radius:50%; object-fit:cover; }
     .site-nav { display:flex; flex-wrap:nowrap; gap:5px; justify-content:space-between; }
-    .nav-link { flex:1; min-width:0; margin:0; padding:9px 5px; border-radius:9px; border:1px solid #D6D6D9; background:#FFFFFF; color:#222222; font-size:13px; font-weight:700; white-space:nowrap; }
-    .nav-link:hover, .nav-link.active { background:#222222; color:#FFFFFF; border-color:#222222;}
-    .home-hero {padding:22px 15px 24px; border-radius:12px; background:transparent;}
+    .nav-link { flex:1; min-width:0; margin:0; padding:9px 5px; border-radius:9px; border:1px solid #DCD4C9; background:#E8E0D6; color:#292622; font-size:13px; font-weight:700; white-space:nowrap; }
+    .nav-link:hover, .nav-link.active { background:#292622; color:#fff; }
+    .home-hero { padding:22px 15px 24px; border-radius:18px; background:linear-gradient(rgba(244,240,234,.72),rgba(220,212,201,.82)),url('images/accueil.png') center 40%/cover no-repeat; }
     .home-grid { gap:12px; margin-top:18px; }
-    .home-option {background:#FFFFFF; color:#222222; border:1px solid #D6D6D6; border-radius:10px; box-shadow:none;}
+    .home-option { min-height:165px; background:#DCD4C9; color:#292622; border:1px solid #C9BFB2; border-radius:16px; padding:18px 13px; box-shadow:0 4px 12px rgba(41,38,34,.08); }
     .home-option:hover { background:#E7E0D7; }
-    .home-option strong { grid-column: 2; align-self: end; display: block; margin-bottom: 6px; color: #222222; font-size: 17px; line-height: 1.3;}
-    .home-option span:last-child { grid-column: 2; align-self: start; display: block; color: #666666; font-size: 13px; line-height: 1.5; font-weight: normal;}
-    .home-icon { grid-column: 1; grid-row: 1 / 3; width: 100%; max-width: 110px; height: 95px; object-fit: contain; display: block; margin: auto;}
+    .home-option strong { color:#292622; font-size:16px; }
+    .home-option span:last-child { color:#514B45; }
+    .home-icon { width:100px; height:100px; object-fit:contain; display:block; margin:0 auto 10px; }
     .home-intro { color:#514B45; }
     .help-actions { flex-direction:row; }
     .secondary-btn { background:#77716A; }
@@ -296,16 +296,17 @@
       .site-brand { font-size:13px; margin-bottom:7px; }
       .nav-link { font-size:11px; padding:9px 2px; }
       .home-hero { padding:16px 10px 18px; }
-      .home-grid { grid-template-columns:1fr; gap: 12px; }
-      .home-option { grid-template-columns: 85px 1fr; column-gap: 12px; min-height: 110px; padding: 12px;}
-      .home-icon { width:100%; max-width: 85px; height:75px; }
-      .home-option strong { font-size:15px; margin-bottom: 4px;}
-      .home-option span:last-child { font-size:12px; line-height: 1.4;}
-      .access-row {border-bottom:1px solid #E5DED5; }
+      .home-grid { grid-template-columns:1fr 1fr; }
+      .home-option { min-height:150px; padding:14px 9px; }
+      .home-icon { width:82px; height:82px; }
+      .home-option strong { font-size:14px; }
+      .home-option span:last-child { font-size:12px; }
+      .access-row { grid-template-columns:1fr 1fr; }
       .help-card, .card { padding:18px; }
       .help-actions { flex-direction:column; }
       .help-actions button { width:100%; }
     }
+
 
   </style>
 </head>
