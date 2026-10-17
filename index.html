@@ -6,13 +6,41 @@
   <title>Au Cœur des Tribunes</title>
   <style>
     * { box-sizing: border-box; }
+    :root {
+      --bg: #F4F0EA;
+      --surface: #FFFDFA;
+      --taupe: #DCD4C9;
+      --taupe-border: #C9BFB2;
+      --text: #292622;
+      --muted: #6F675F;
+      --accent: #A74742;
+      --accent-dark: #873733;
+      --line: #E5DED5;
+    }
+    html { scroll-behavior: smooth; }
     body {
       font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 40px auto;
-      padding: 20px;
-      background: #f5f5f5;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px;
+      background: var(--bg);
+      color: var(--text);
     }
+    .site-header {
+      display:flex; align-items:center; justify-content:space-between; gap:24px;
+      padding:14px 22px; margin:0 0 28px; background:rgba(255,253,250,.94);
+      border:1px solid rgba(201,191,178,.55); border-radius:14px;
+      box-shadow:0 4px 18px rgba(41,38,34,.05);
+      position:sticky; top:10px; z-index:500; backdrop-filter:blur(10px);
+    }
+    .brand { display:flex; align-items:center; gap:12px; min-width:230px; }
+    .brand .logo { width:48px; height:48px; margin:0; }
+    .brand-name { font-weight:800; letter-spacing:.7px; font-size:15px; }
+    .brand-tagline { color:var(--muted); font-size:9px; letter-spacing:1.7px; margin-top:5px; text-transform:uppercase; }
+    .site-nav { display:flex; align-items:center; justify-content:flex-end; gap:6px; flex-wrap:wrap; }
+    .nav-link { width:auto; margin:0; padding:10px 12px; background:transparent; color:var(--text); border:0; border-radius:8px; font-size:13px; font-weight:700; }
+    .nav-link:hover, .nav-link.active { background:#EEE6DC; color:var(--accent-dark); }
+    .nav-link.active { box-shadow:inset 0 -3px var(--accent); border-radius:8px 8px 4px 4px; }
     .logo {
       display: block;
       margin: 0 auto 16px auto;
@@ -22,22 +50,23 @@
       object-fit: cover;
     }
     h2 {
-      color: #333;
+      color: var(--text);
       text-align: center;
       margin-bottom: 6px;
     }
     .subtitle {
       text-align: center;
-      color: #555;
+      color: var(--muted);
       font-size: 14px;
       margin-bottom: 24px;
       line-height: 1.6;
     }
     .card {
-      background: white;
-      border-radius: 10px;
+      background: var(--surface);
+      border: 1px solid rgba(201,191,178,.55);
+      border-radius: 16px;
       padding: 30px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 5px 22px rgba(41,38,34,0.06);
     }
     label {
       display: block;
@@ -126,15 +155,15 @@
       width: 100%;
       margin-top: 30px;
       padding: 13px;
-      background: #4285F4;
+      background: var(--accent);
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 9px;
       font-size: 16px;
       cursor: pointer;
       font-weight: bold;
     }
-    button:hover { background: #3367D6; }
+    button:hover { background: var(--accent-dark); }
     button:disabled { background: #bbb; cursor: not-allowed; }
     #confirmation {
       display: none;
@@ -228,35 +257,56 @@
       text-align: center;
     }
 
-    .home-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:24px; }
-    .home-option { width:100%; min-height:150px; margin:0; background:#292929; color:#fff; border:1px solid #292929; border-radius:14px; padding:22px 16px; cursor:pointer; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,.10); transition:transform .15s, box-shadow .15s; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-    .home-option:hover { transform:translateY(-2px); background:#414141; box-shadow:0 5px 16px rgba(0,0,0,.16); }
-    .home-option .emoji { font-size:28px; display:block; margin-bottom:12px; line-height:1.2; }
-    .home-option strong { display:block; font-size:17px; color:#fff; margin-bottom:8px; }
-    .home-option span:last-child { display:block; color:#eee; font-size:13px; line-height:1.5; }
-    .home-intro { text-align:center; color:#555; line-height:1.6; margin:10px 0 20px; }
-    .help-card { display:none; background:white; border-radius:10px; padding:26px; box-shadow:0 2px 10px rgba(0,0,0,.1); }
+    .home-hero { padding:34px 20px 38px; border-radius:18px; background:linear-gradient(135deg,rgba(244,240,234,.96),rgba(220,212,201,.88)); }
+    .home-kicker { text-align:center; text-transform:uppercase; letter-spacing:3px; color:var(--accent); font-size:11px; font-weight:bold; margin:0 0 12px; }
+    .home-title { font-size:clamp(26px,4vw,40px); letter-spacing:-.8px; margin:0 0 12px; }
+    .home-title:after { content:""; display:block; width:54px; height:3px; background:var(--accent); margin:18px auto 0; }
+    .home-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:30px auto 0; max-width:1000px; }
+    .home-option { width:100%; min-height:230px; margin:0; background:rgba(255,253,250,.72); color:var(--text); border:1px solid rgba(255,255,255,.9); border-radius:16px; padding:24px; cursor:pointer; text-align:left; box-shadow:0 4px 16px rgba(41,38,34,.06); transition:transform .18s, box-shadow .18s, background .18s; display:grid; grid-template-columns: minmax(110px, .9fr) 1.1fr; align-items:center; gap:20px; }
+    .home-option:hover { transform:translateY(-3px); background:#FFFDFA; box-shadow:0 10px 24px rgba(41,38,34,.10); }
+    .home-option .home-icon { display:block; width:100%; max-width:190px; height:170px; object-fit:contain; margin:auto; }
+    .home-option .home-copy { display:block; }
+    .home-option strong { display:block; font-size:19px; color:var(--text); margin-bottom:10px; line-height:1.25; }
+    .home-option .home-description { display:block; color:var(--muted); font-size:14px; line-height:1.6; font-weight:normal; }
+    .home-option .home-arrow { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; margin-top:17px; border-radius:50%; background:var(--accent); color:white; font-size:23px; line-height:1; }
+    .home-intro { text-align:center; color:var(--muted); line-height:1.6; margin:10px 0 20px; }
+    .help-card { display:none; background:var(--surface); border:1px solid rgba(201,191,178,.55); border-radius:16px; padding:30px; box-shadow:0 5px 22px rgba(41,38,34,.06); }
     .help-explanation { color:#444; font-size:14px; line-height:1.7; }
     .help-explanation p { margin:10px 0; }
     .help-explanation strong { color:#222; }
-    .help-section-title { font-size:13px; color:#1565C0; text-transform:uppercase; letter-spacing:.5px; margin:25px 0 0; font-weight:bold; }
+    .help-section-title { font-size:13px; color:var(--accent); text-transform:uppercase; letter-spacing:.5px; margin:25px 0 0; font-weight:bold; }
     .access-row { display:grid; grid-template-columns: .7fr 1.25fr 1.35fr 1.5fr; gap:9px; align-items:start; padding:14px 0; border-bottom:1px solid #eee; }
     .access-row .field label { margin-top:0; font-size:12px; }
     .access-row input, .access-row select, .access-row textarea { margin-top:6px; padding:9px 8px; font-size:13px; min-width:0; }
     .access-row .remarks-field { grid-column:1 / -1; }
     .access-row .remarks-field textarea { min-height:54px; }
     .access-row .remove-access { grid-column:1 / -1; justify-self:end; width:auto; margin:0; padding:6px 10px; background:#fce8e6; color:#a52714; font-size:12px; }
-    .add-access-btn { width:auto; margin-top:16px; padding:10px 14px; background:#e8f0fe; color:#174ea6; border:1px solid #d2e3fc; }
-    .add-access-btn:hover { background:#dbe7fb; }
-    .secondary-btn { width:auto; margin-top:14px; background:#666; }
+    .add-access-btn { width:auto; margin-top:16px; padding:10px 14px; background:#EEE6DC; color:var(--text); border:1px solid var(--taupe-border); }
+    .add-access-btn:hover { background:var(--taupe); }
+    .secondary-btn { width:auto; margin-top:14px; background:var(--taupe); color:var(--text); }
     .help-actions { display:flex; gap:10px; align-items:stretch; margin-top:22px; }
     .help-actions button { flex:1; width:0; min-height:48px; margin:0; padding:12px 10px; display:flex; align-items:center; justify-content:center; line-height:1.25; }
     .help-note { font-size:12px; color:#777; line-height:1.5; margin-top:14px; }
-    @media (max-width:650px) {
-      .home-grid { grid-template-columns:1fr; }
+    .section-divider { border-top-color:var(--line); }
+    input:focus, select:focus, textarea:focus, .custom-select-selected:focus { outline:2px solid rgba(167,71,66,.22); border-color:var(--accent); }
+    @media (max-width:800px) {
+      body { padding:14px; }
+      .site-header { position:static; flex-direction:column; align-items:stretch; padding:14px; gap:12px; }
+      .brand { justify-content:center; }
+      .site-nav { justify-content:center; }
+      .nav-link { font-size:12px; padding:9px 10px; }
+      .home-grid { grid-template-columns:1fr; max-width:600px; }
+      .home-option { min-height:190px; }
+    }
+    @media (max-width:520px) {
+      .home-hero { padding:24px 12px; }
+      .home-option { grid-template-columns:100px 1fr; gap:14px; padding:16px; }
+      .home-option .home-icon { height:125px; }
+      .home-option strong { font-size:16px; }
+      .home-option .home-description { font-size:12px; }
       .access-row { grid-template-columns:1fr 1fr; }
       .access-row .remarks-field { grid-column:1 / -1; }
-      .help-card { padding:20px; }
+      .help-card, .card, .recap-card { padding:20px; }
       .help-actions { flex-direction:column; }
       .help-actions button { width:100%; }
     }
@@ -265,22 +315,33 @@
 </head>
 <body>
 
+  <header class="site-header">
+    <div class="brand">
+      <img src="https://lh3.googleusercontent.com/a/ACg8ocJ2hyWT-Cpq-XEg-oIX9msJIimG3dPKIvHyIYa7hZZb9P5cUGg=s360-c-no" alt="" class="logo">
+      <div><div class="brand-name">AU CŒUR DES TRIBUNES</div><div class="brand-tagline">Le football se vit aussi en déplacement</div></div>
+    </div>
+    <nav class="site-nav" aria-label="Navigation principale">
+      <button type="button" class="nav-link active" data-page="home" onclick="retourAccueil()">⌂ &nbsp; Accueil</button>
+      <button type="button" class="nav-link" data-page="tickets" onclick="ouvrirDemandes()">♧ &nbsp; Demande de billets</button>
+      <button type="button" class="nav-link" data-page="help" onclick="ouvrirAide()">♙ &nbsp; Aider la communauté</button>
+    </nav>
+  </header>
 
   <div class="card" id="homeCard">
-    <img src="https://lh3.googleusercontent.com/a/ACg8ocJ2hyWT-Cpq-XEg-oIX9msJIimG3dPKIvHyIYa7hZZb9P5cUGg=s360-c-no" alt="Au Coeur des Tribunes" class="logo">
-    <h2>Au Cœur des Tribunes</h2>
-    <p class="home-intro">Bienvenue ! Que souhaites-tu faire ?</p>
+    <div class="home-hero">
+    <p class="home-kicker">Le football se vit aussi en déplacement</p>
+    <h2 class="home-title">Au Cœur des Tribunes</h2>
+    <p class="home-intro">Bienvenue ! Que souhaites-tu faire aujourd'hui ?</p>
     <div class="home-grid">
       <button type="button" class="home-option" onclick="ouvrirDemandes()">
-        <span class="emoji">🎟️</span>
-        <strong>Demandes de billets</strong>
-        <span>Je souhaite formuler mon intérêt pour un match</span>
+        <img src="images/tribune.png" alt="Tribune de football" class="home-icon">
+        <span class="home-copy"><strong>Demandes de billets</strong><span class="home-description">Je souhaite formuler mon intérêt pour un match et vivre les plus belles rencontres.</span><span class="home-arrow" aria-hidden="true">›</span></span>
       </button>
       <button type="button" class="home-option" onclick="ouvrirAide()">
-        <span class="emoji">🤝</span>
-        <strong>Aider la communauté</strong>
-        <span>J'ai des abonnements ou des accès billetterie à partager</span>
+        <img src="images/supporters.png" alt="Supporters de football" class="home-icon">
+        <span class="home-copy"><strong>Aider la communauté</strong><span class="home-description">J'ai des abonnements ou des accès billetterie à partager avec d'autres passionnés.</span><span class="home-arrow" aria-hidden="true">›</span></span>
       </button>
+    </div>
     </div>
   </div>
 
@@ -388,11 +449,8 @@
     <img src="https://lh3.googleusercontent.com/a/ACg8ocJ2hyWT-Cpq-XEg-oIX9msJIimG3dPKIvHyIYa7hZZb9P5cUGg=s360-c-no" style="width:70px;height:70px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 16px auto;">
     <div id="recapContenu" style="color:#2d7a3a;line-height:1.8;"></div>
     <br>
-    <button onclick="nouvelleDemandeande()" style="background:#1565C0;color:white;border:none;padding:10px 20px;border-radius:6px;font-size:14px;cursor:pointer;width:auto;margin-top:0;">
+    <button onclick="nouvelleDemandeande()" style="background:var(--accent);color:white;border:none;padding:10px 20px;border-radius:6px;font-size:14px;cursor:pointer;width:auto;margin-top:0;">
       &#43; Effectuer une autre demande
-    </button>
-    <button onclick="retourAccueil()" style="background:#666;color:white;border:none;padding:10px 20px;border-radius:6px;font-size:14px;cursor:pointer;width:auto;margin-top:10px;">
-      Retour à l'accueil
     </button>
   </div>
 
@@ -401,28 +459,27 @@
     <h2>Aider la communauté</h2>
     <div class="help-explanation">
       <p><strong>🤝 Partageons nos accès billetterie !</strong></p>
-      <p>L’objectif est de <strong>mutualiser les memberships, abonnements et autres comptes de notre communauté</strong> afin de faciliter l'accès aux billetteries de clubs auxquels nous n’avons pas forcément accès par nos propres moyens.</p>
+      <p>L’objectif est de : <strong>mutualiser les memberships, abonnements et autres comptes de notre communauté</strong> afin de faciliter l’accès aux billetteries de clubs auxquels nous n’avons pas forcément accès par nos propres moyens.</p>
       <p>Si tu disposes d’un accès pouvant offrir des avantages en billetterie, n’hésite pas à le renseigner via ce formulaire !</p>
       <p>🎟️ En contrepartie, une compensation sera prévue pour chaque billet acheté grâce à ton accès. Le montant sera défini ensemble en privé, afin de contribuer à amortir le coût de ton abonnement ou membership.</p>
-      <p>Merci à tous ceux qui participeront à cette initiative.</p>
+      <p>Merci à tous ceux qui participeront à cette initiative</p>
     </div>
 
     <hr class="section-divider">
     <div class="help-section-title">Contact</div>
     <label for="helpName">Nom / Prénom</label>
-    <input type="text" id="helpName" placeholder="Nom et prénom" oninput="checkHelpForm()">
+    <input type="text" id="helpName" placeholder="Ton nom et prénom" oninput="checkHelpForm()">
     <label for="helpInstagram">Pseudo Instagram</label>
     <input type="text" id="helpInstagram" placeholder="@tonpseudo" oninput="checkHelpForm()">
 
     <hr class="section-divider">
     <div class="help-section-title">ACCES BILLETTERIE</div>
-    <p style="font-size:13px;color:#666;line-height:1.5;">Tu as la possibilité de partager un ou plusieurs accès privilégiés, afin d'en faire profiter à d'autres </p>
+    <p style="font-size:13px;color:#666;line-height:1.5;">Tu peux proposer tes différents accès ci-dessous.</p>
     <div id="accessRows"></div>
     <button type="button" class="add-access-btn" onclick="ajouterAcces()">+ Ajouter</button>
     <div id="helpError" style="display:none;margin-top:18px;padding:14px;background:#fce8e6;border-radius:6px;color:#c62828;text-align:center;"></div>
     <div class="help-actions">
       <button type="button" id="btnSubmitHelp" onclick="envoyerAcces()" disabled>Envoyer</button>
-      <button type="button" class="secondary-btn" onclick="retourAccueil()">Accueil</button>
     </div>
     <div class="help-note">Tes informations seront utilisées uniquement pour gérer les accès partagés au sein de la communauté. Nous te recontacterons si besoin.</div>
   </div>
@@ -434,15 +491,15 @@
       Tes accès ont bien été enregistrés. Grâce à toi, la communauté pourra bénéficier de nouvelles possibilités pour accéder aux billetteries.<br><br>
       Nous n’hésiterons pas à te recontacter si nous avons besoin de précisions ou pour organiser l’utilisation de tes accès.
     </div>
-    <button onclick="nouveauFormulaireAcces()" style="background:#1565C0;color:white;border:none;padding:10px 20px;border-radius:6px;font-size:14px;cursor:pointer;width:auto;margin-top:20px;">＋ Ajouter d'autres accès</button>
-    <button onclick="retourAccueil()" style="background:#666;color:white;border:none;padding:10px 20px;border-radius:6px;font-size:14px;cursor:pointer;width:auto;margin-top:10px;">Retour à l'accueil</button>
+    <button onclick="nouveauFormulaireAcces()" style="background:var(--accent);color:white;border:none;padding:10px 20px;border-radius:6px;font-size:14px;cursor:pointer;width:auto;margin-top:20px;">＋ Ajouter d'autres accès</button>
   </div>
 
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwcomK1ioa_1LVeGKOevsQ9__fVvGwYUJ8uY76-NIwIsJRmdXzM9zh18wrTK0AMKD-/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3xmpGN4g0IglymylArdHl64fuOVXsV_xtsJkk8gyqlO_CAWrrgxnlothRNEAP7vHq/exec';
 
     const MESSAGES_CLUBS = {
       'Manchester United': '&#128241; Bon &#224; savoir : pour ce match, le transfert de billets n&#233;cessite un appareil Android. Merci de le pr&#233;ciser si cela pose un probl&#232;me.',
+      'Chelsea': '&#127915; Bon &#224; savoir : le transfert de billets pour Chelsea s\'effectue via un Forward Membership, moyennant 15&#163; sur le site officiel du club.'
     };
 
     const CHAMPIONNATS_FLAGS = {
@@ -788,6 +845,11 @@ function loadMatchs() {
     }
 
     // --- Navigation entre les deux formulaires ---
+    function definirNavigation(page) {
+      document.querySelectorAll('.nav-link').forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-page') === page);
+      });
+    }
     function masquerToutesLesPages() {
       ['homeCard','mainCard','recapCard','helpCard','helpRecapCard'].forEach(function(id) {
         var el = document.getElementById(id);
@@ -797,6 +859,7 @@ function loadMatchs() {
     function ouvrirDemandes() {
       masquerToutesLesPages();
       document.getElementById('mainCard').style.display = 'block';
+      definirNavigation('tickets');
       window.scrollTo(0,0);
     }
     function ouvrirAide() {
@@ -804,11 +867,13 @@ function loadMatchs() {
       document.getElementById('helpCard').style.display = 'block';
       if (!document.querySelector('.access-row')) ajouterAcces();
       checkHelpForm();
+      definirNavigation('help');
       window.scrollTo(0,0);
     }
     function retourAccueil() {
       masquerToutesLesPages();
       document.getElementById('homeCard').style.display = 'block';
+      definirNavigation('home');
       window.scrollTo(0,0);
     }
 
@@ -822,13 +887,13 @@ function loadMatchs() {
         'Angers','Auxerre','Brest','Le Havre','Le Mans','Lens','Lille','Lorient','Lyon','Marseille','Monaco','Nice','Paris FC','PSG','Rennes','Strasbourg','Toulouse','Troyes'
       ],
       'Liga': [
-        'Athletic Club','Atlético Madrid','Osasuna','Celta Vigo','Alavés','Elche','FC Barcelona','Getafe','Levante','Málaga','Santander','Rayo Vallecano','Deportivo','Espanyol','Real Betis','Real Madrid','Real Sociedad','Seville','Valence','Villarreal'
+        'Athletic Club','Atlético Madrid','Osasuna','Celta Vigo','Alavés','Elche','FC Barcelone','Getafe','Levante','Málaga','Santander','Rayo Vallecano','Deportivo','Espanyol','Real Betis','Real Madrid','Real Sociedad','Seville','Valence','Villarreal'
       ],
       'Serie A': [
-        'Atalanta','Bologne','Cagliari','Côme','Cremonese','Fiorentina','Genoa','Inter','Juventus','Lazio','Lecce','Milan','Napoli','Parma','Pisa','Roma','Sassuolo','Torino','Udinese','Verone'
+        'Atalanta','Bologna','Cagliari','Como','Cremonese','Fiorentina','Genoa','Inter','Juventus','Lazio','Lecce','Milan','Napoli','Parma','Pisa','Roma','Sassuolo','Torino','Udinese','Verona'
       ],
       'Bundesliga': [
-        'Augsburg','Bayer Leverkusen','Bayern Munich','Borussia Dortmund','Borussia Mönchengladbach','Eintracht Francfort','Fribourg','Hambourg','Heidenheim','Hoffenheim','Cologne','Mayence','RB Leipzig','St Pauli','Schalke 04','Union Berlin','Werder Breme','Wolfsburg'
+        'Augsburg','Bayer Leverkusen','Bayern Munich','Borussia Dortmund','Borussia Mönchengladbach','Eintracht Francfort','Friburg','Hambourg','Heidenheim','Hoffenheim','Cologne','Mayence','RB Leipzig','St. Pauli','Schalke 04','Union Berlin','Werder Breme','Wolfsburg'
       ]
     };
     let accessCounter = 0;
@@ -866,11 +931,11 @@ function loadMatchs() {
         return wrap;
       }
 
-      var nombre = creerChamp(['1','2','3','4','5 ou plus',], 'Nb');
+      var nombre = creerChamp(['1','2','3','4','5 ou plus'], 'Nombre');
       nombre.dataset.field = 'nombre';
       nombre.addEventListener('change', checkHelpForm);
 
-      var type = creerChamp(['Abonnement','Membership',"Historique d'achat",'Autre'], 'Type');
+      var type = creerChamp(['Abonnement','Membership',"Historique d'achat",'Autre'], 'Type d’accès');
       type.dataset.field = 'type';
       type.addEventListener('change', checkHelpForm);
 
@@ -895,7 +960,7 @@ function loadMatchs() {
       row.appendChild(clubWrap);
 
       var remarques = document.createElement('textarea');
-      remarques.placeholder = 'Nombre de place(s) possible(s), fin de validité, loyalty points...';
+      remarques.placeholder = 'Nombre de place(s) par compte, validité, loyalty points...';
       remarques.dataset.field = 'remarques';
       row.appendChild(field('Remarques (facultatif)', remarques, 'remarks-field'));
 
