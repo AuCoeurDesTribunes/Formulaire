@@ -351,7 +351,7 @@
       text-align:left; box-shadow:0 3px 12px rgba(0,0,0,.14); transition:background .15s, transform .15s, box-shadow .15s;
     }
     .home-option:hover { background:#fff; color:#202020; box-shadow:0 5px 16px rgba(0,0,0,.18); transform:translateY(-1px); }
-    .home-icon { display:block; width:100%; height:108px; max-width:150px; margin:0; object-fit:contain; objectif-position : center; border-radius:0; background: transparent; }
+    .home-icon { display:block; width:100%; height:80px; max-width:100px; margin:0; object-fit:contain; objectif-position : center; border-radius:0; background: transparent; }
     .home-option-copy { display:block; min-width:0; }
     .home-option-copy strong { display:block; margin:0 0 7px; color:#171717; font-size:clamp(16px,4.2vw,20px); line-height:1.25; }
     .home-option-copy span { display:block; color:#505050; font-size:clamp(13px,3.4vw,15px); line-height:1.45; }
@@ -481,7 +481,7 @@
     <p class="subtitle">
       <strong>Au C&#339;ur des Tribunes vous souhaite la bienvenue !</strong><br><br>
       Vous avez un match en t&#234;te, un match de r&#234;ve ou envie de vivre une parent&#232;se football lors de votre prochain voyage ? On a peut-&#234;tre ce qu'il vous faut !<br><br>
-      Remplis le formulaire ci-dessous pour faire ta demande &#128071;
+      Remplis le formulaire ci-dessous pour faire ta demande;
     </p>
 
     <label class="section-title">Le match</label>
@@ -590,7 +590,7 @@
     <h2>Aider la communauté</h2>
     <div class="help-explanation">
       <p><strong>🤝 Partageons nos accès billetterie !</strong></p>
-      <p>L’objectif est de <strong>mutualiser les memberships, abonnements et autres compte de notre communauté</strong> afin de faciliter l’accès aux billetteries de clubs auxquels nous n’avons pas forcément accès par nos propres moyens.</p>
+      <p>L’objectif est de mutualiser les memberships, abonnements et autres compte de notre communauté afin de faciliter l’accès aux billetteries de clubs auxquels nous n’avons pas forcément accès par nos propres moyens.</p>
       <p>Si tu disposes d’un accès offrant des avantages en billetterie, n’hésite pas à le renseigner via ce formulaire !</p>
       <p>🎟️ En contrepartie, tu bénéficieras d’une compensation financière et pourras, selon les clubs, accumuler des points permettant d’accéder plus facilement aux matchs les plus demandés.</p>
       <p>Merci à tous ceux qui participeront à cette initiative </p>
@@ -1069,7 +1069,7 @@ function loadMatchs() {
       type.dataset.field = 'type';
       type.addEventListener('change', checkHelpForm);
 
-      var championnat = creerChamp(['Premier League','Ligue 1','Liga','Serie A','Bundesliga','Autre championnat'], 'Championnat');
+      var championnat = creerChamp(['Premier League','Ligue 1','Liga','Serie A','Bundesliga','Autre'], 'Championnat');
       championnat.dataset.field = 'championnat';
       championnat.addEventListener('change', function() { mettreAJourClub(row); checkHelpForm(); });
 
@@ -1118,7 +1118,7 @@ function loadMatchs() {
       var old = row.querySelector('[data-field="club"]');
       var wrap = old.parentNode;
       var newClub;
-      if (championnat === 'Autre championnat') {
+      if (championnat === 'Autre') {
         newClub = document.createElement('input');
         newClub.type = 'text';
         newClub.placeholder = 'Nom du club';
