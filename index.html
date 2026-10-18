@@ -387,7 +387,54 @@
       .home-option-copy strong { font-size:15px; }
       .home-option-copy span { font-size:12px; }
     }
+    
+/* Harmonisation des pages Billets et Communauté */
+#mainCard,
+#helpCard {
+    background: #FFFFFF;
+    color: #202020;
+    border-radius: 14px;
+}
 
+#mainCard h2,
+#helpCard h2 {
+    color: #202020;
+    font-size: 22px;
+    text-align: center;
+}
+
+#mainCard .subtitle,
+#helpCard .help-explanation {
+    color: #505050;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+#mainCard .section-title,
+#helpCard .help-section-title {
+    color: #202020;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+}
+
+#helpCard .help-explanation {
+    text-align: center;
+}
+
+#mainCard button:not(.nav-link),
+#helpCard button:not(.nav-link) {
+    background: #202020;
+    color: #FFFFFF;
+    font-size: 15px;
+    border-radius: 8px;
+}
+
+#mainCard label,
+#helpCard label {
+    color: #333333;
+    font-size: 14px;
+}
   </style>
 </head>
 <body>
@@ -582,7 +629,6 @@
 
     const MESSAGES_CLUBS = {
       'Manchester United': '&#128241; Bon &#224; savoir : pour ce match, le transfert de billets n&#233;cessite un appareil Android. Merci de le pr&#233;ciser si cela pose un probl&#232;me.',
-      'Chelsea': '&#127915; Bon &#224; savoir : le transfert de billets pour Chelsea s\'effectue via un Forward Membership, moyennant 15&#163; sur le site officiel du club.'
     };
 
     const CHAMPIONNATS_FLAGS = {
