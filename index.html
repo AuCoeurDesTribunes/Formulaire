@@ -351,7 +351,7 @@
       text-align:left; box-shadow:0 3px 12px rgba(0,0,0,.14); transition:background .15s, transform .15s, box-shadow .15s;
     }
     .home-option:hover { background:#fff; color:#202020; box-shadow:0 5px 16px rgba(0,0,0,.18); transform:translateY(-1px); }
-    .home-icon { display:block; width:100%; height:70px; max-width:90px; margin:0; object-fit:contain; objectif-position : center; border-radius:0; background: transparent; }
+    .home-icon { display:block; width:100%; height:70px; max-width:90px; margin:0 0 0 10px; object-fit:contain; objectif-position : center; border-radius:0; background: transparent; }
     .home-option-copy { display:block; min-width:0; }
     .home-option-copy strong { display:block; margin:0 0 7px; color:#171717; font-size:clamp(16px,4.2vw,20px); line-height:1.25; }
     .home-option-copy span { display:block; color:#505050; font-size:clamp(13px,3.4vw,15px); line-height:1.45; }
@@ -1090,7 +1090,7 @@ function loadMatchs() {
       row.appendChild(field('Nombre', nombre));
 
       var remarques = document.createElement('textarea');
-      remarques.placeholder = 'Remarques (facultatif)';
+      remarques.placeholder = 'Membership gold/basic, nombre de places par compte, point de fidélité...';
       remarques.dataset.field = 'remarques';
       row.appendChild(field('Remarques (facultatif)', remarques, 'remarks-field'));
 
