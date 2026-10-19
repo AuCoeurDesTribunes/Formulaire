@@ -1092,7 +1092,11 @@ function loadMatchs() {
       var remarques = document.createElement('textarea');
       remarques.placeholder = 'Type de membership (gold/basic), nombre de place(s) par compte, point de fidélité...';
       remarques.dataset.field = 'remarques';
-      row.appendChild(field('&#128172; Remarques ou pr&#233;cisions <span style="font-weight:normal;color:#aaa;">(facultatif)</span>', remarques, 'remarks-field'));
+      
+      var remarksField = field('', remarques, 'remarks-field');
+      remarksField.querySelector('label').innerHTML =
+        '&#128172; Remarques ou pr&#233;cisions <span style="font-weight:normal;color:#aaa;">(facultatif)</span>';
+      row.appendChild(remarksField);
 
       var remove = document.createElement('button');
       remove.type = 'button';
