@@ -453,7 +453,7 @@
 
   <div class="card home-card-wrap" id="homeCard">
     <div class="home-hero">
-    <p class="home-intro">Bienvenue ! Que souhaites-tu faire ?</p>
+    <p class="home-intro">Au C&#339;ur des Tribunes te souhaite la bienvenue ! Que souhaites-tu faire ?</p>
     <div class="home-grid">
       <button type="button" class="home-option" onclick="ouvrirDemandes()">
         <img src="images/ticket.png" alt="Tribune de football" class="home-icon">
@@ -479,9 +479,9 @@
 
     <h2>Ma demande de billet</h2>
     <p class="subtitle">
-      <strong>Au C&#339;ur des Tribunes vous souhaite la bienvenue !</strong><br><br>
-      Vous avez un match en t&#234;te, un match de r&#234;ve ou envie de vivre une parent&#232;se football lors de votre prochain voyage ? On a peut-&#234;tre ce qu'il vous faut !<br><br>
-      Remplis le formulaire ci-dessous pour faire ta demande;
+      Vous avez un match en t&#234;te, un match de r&#234;ve ou envie de vivre une parent&#232;se football lors de votre prochain voyage ? 
+      On a peut-&#234;tre ce qu'il vous faut !<br><br>
+      Remplis le formulaire ci-dessous pour faire ta demande.
     </p>
 
     <label class="section-title">Le match</label>
@@ -556,7 +556,7 @@
     <hr class="section-divider">
     <label class="section-title">Contact</label>
 
-    <label>&#128248; Ton pseudo Instagram</label>
+    <label>&#128248; Pseudo Instagram</label>
     <input type="text" id="instagram" placeholder="@tonpseudo" oninput="checkForm()">
 
     <label>&#128172; Remarques ou pr&#233;cisions <span style="font-weight:normal;color:#aaa;">(facultatif)</span></label>
@@ -590,15 +590,15 @@
     <h2>Aider la communauté</h2>
     <div class="help-explanation">
       <p><strong>🤝 Partageons nos accès billetterie !</strong></p>
-      <p>L’objectif est de mutualiser les memberships, abonnements et autres compte de notre communauté afin de faciliter l’accès aux billetteries de clubs auxquels nous n’avons pas forcément accès par nos propres moyens.</p>
+      <p>L’objectif est de mutualiser les memberships, abonnements et autres comptes dans la communauté afin de faciliter l’accès aux billetteries de clubs auxquels nous n’avons pas forcément accès par nos propres moyens.</p>
       <p>Si tu disposes d’un accès offrant des avantages en billetterie, n’hésite pas à le renseigner via ce formulaire !</p>
-      <p>🎟️ En contrepartie, tu bénéficieras d’une compensation financière et pourras, selon les clubs, accumuler des points permettant d’accéder plus facilement aux matchs les plus demandés.</p>
-      <p>Merci à tous ceux qui participeront à cette initiative </p>
+      <p>🎟️ En contrepartie, tu pourras bénéficier d’une compensation financière et, selon les clubs, accumuler des points permettant d’accéder plus facilement aux matchs les plus demandés.</p>
+      <p>Merci à tous ceux qui participeront à cette initiative !</p>
     </div>
 
     <hr class="section-divider">
     <div class="help-section-title">Contact</div>
-    <label for="helpInstagram">Pseudo Instagram</label>
+    <label for="helpInstagram"><label>&#128248; Pseudo Instagram</label>
     <input type="text" id="helpInstagram" placeholder="@tonpseudo" oninput="checkHelpForm()">
 
     <hr class="section-divider">
@@ -1061,7 +1061,7 @@ function loadMatchs() {
         return wrap;
       }
 
-      var nombre = creerChamp(['1','2','3','4','5','6','7','8','9','10 ou plus'], 'Nombre');
+      var nombre = creerChamp(['1','2','3','4','5 ou plus'], 'Nombre');
       nombre.dataset.field = 'nombre';
       nombre.addEventListener('change', checkHelpForm);
 
@@ -1090,9 +1090,9 @@ function loadMatchs() {
       row.appendChild(field('Nombre', nombre));
 
       var remarques = document.createElement('textarea');
-      remarques.placeholder = 'Membership gold/basic, nombre de places par compte, point de fidélité...';
+      remarques.placeholder = 'Type de membership (gold/basic), nombre de place(s) par compte, point de fidélité...';
       remarques.dataset.field = 'remarques';
-      row.appendChild(field('Remarques (facultatif)', remarques, 'remarks-field'));
+      row.appendChild(field('&#128172; Remarques ou pr&#233;cisions <span style="font-weight:normal;color:#aaa;">(facultatif)</span>', remarques, 'remarks-field'));
 
       var remove = document.createElement('button');
       remove.type = 'button';
