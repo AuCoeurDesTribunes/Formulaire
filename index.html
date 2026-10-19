@@ -1173,7 +1173,7 @@ function loadMatchs() {
       error.style.display = 'none';
 
       callScript('enregistrerMemberships', {
-        data: { nomPrenom: insta, instagram: insta, acces: acces }
+        data: { instagram: insta, acces: acces }
       }).then(function(result) {
         if (!result || result.status !== 'ok') throw new Error('Réponse inattendue du serveur');
         masquerToutesLesPages();
