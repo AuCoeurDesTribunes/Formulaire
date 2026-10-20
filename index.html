@@ -1134,7 +1134,7 @@ function loadMatchs() {
         newClub.disabled = !championnat;
         newClub.addEventListener('change', checkHelpForm);
       }
-      wrap.replaceChild(newClub, old);
+      old.parentNode.replaceChild(newClub, old);
     }
 
     function checkHelpForm() {
