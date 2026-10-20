@@ -1192,10 +1192,17 @@ function loadMatchs() {
       btn.textContent = 'Envoi en cours...';
       error.style.display = 'none';
 
-      callScript('enregistrerMemberships', {
-        data: { instagram: insta, acces: acces }
-      }).then(function(result) {
-        if (!result || result.status !== 'ok') throw new Error('Réponse inattendue du serveur');
+fetch(SCRIPT_URL, {
+  method: 'POST',
+  mode: 'no-cors',
+  body: JSON.stringify({
+    action: 'enregistrerMemberships',
+    data: {
+      instagram: insta,
+      acces: acces
+    }
+  })
+}).then(function() {
         masquerToutesLesPages();
         document.getElementById('helpRecapCard').style.display = 'block';
         window.scrollTo(0,0);
