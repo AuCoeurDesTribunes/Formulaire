@@ -1162,18 +1162,7 @@ function loadMatchs() {
           club: row.querySelector('[data-field="club"]').value.trim(),
           remarques: row.querySelector('[data-field="remarques"]').value.trim()
         };
-      });
-
-console.log('Championnat :', acces[0].championnat);
-console.log('Club :', acces[0].club);
-console.log('Type du champ club :',
-  document.querySelector('.access-row [data-field="club"]').tagName
-);
-console.log('Données envoyées :', JSON.stringify({
-  instagram: insta,
-  acces: acces
-}));
-      
+      });   
       if (!insta || !acces.length || acces.some(function(a) {
         return !a.nombre || !a.type || !a.championnat || !a.club;
       })) {
