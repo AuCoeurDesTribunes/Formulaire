@@ -1122,8 +1122,8 @@ function loadMatchs() {
       var old = row.querySelector('[data-field="club"]');
       var wrap = old.parentNode;
       var newClub;
-      if (championnat === 'Autre') {
-        newClub = document.createElement('input');
+        newClub = document.createElement('inp
+      if (championnat === 'Autre') {ut');
         newClub.type = 'text';
         newClub.placeholder = 'Nom du club';
         newClub.dataset.field = 'club';
@@ -1164,6 +1164,16 @@ function loadMatchs() {
         };
       });
 
+console.log('Championnat :', acces[0].championnat);
+console.log('Club :', acces[0].club);
+console.log('Type du champ club :',
+  document.querySelector('.access-row [data-field="club"]').tagName
+);
+console.log('Données envoyées :', JSON.stringify({
+  instagram: insta,
+  acces: acces
+}));
+      
       if (!insta || !acces.length || acces.some(function(a) {
         return !a.nombre || !a.type || !a.championnat || !a.club;
       })) {
