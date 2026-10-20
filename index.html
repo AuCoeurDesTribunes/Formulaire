@@ -1122,8 +1122,8 @@ function loadMatchs() {
       var old = row.querySelector('[data-field="club"]');
       var wrap = old.parentNode;
       var newClub;
-        newClub = document.createElement('inp
-      if (championnat === 'Autre') {ut');
+      if (championnat === 'Autre') {
+        newClub = document.createElement('input');
         newClub.type = 'text';
         newClub.placeholder = 'Nom du club';
         newClub.dataset.field = 'club';
@@ -1134,7 +1134,7 @@ function loadMatchs() {
         newClub.disabled = !championnat;
         newClub.addEventListener('change', checkHelpForm);
       }
-      old.parentNode.replaceChild(newClub, old);
+      wrap.replaceChild(newClub, old);
     }
 
     function checkHelpForm() {
@@ -1162,7 +1162,8 @@ function loadMatchs() {
           club: row.querySelector('[data-field="club"]').value.trim(),
           remarques: row.querySelector('[data-field="remarques"]').value.trim()
         };
-      });   
+      });
+
       if (!insta || !acces.length || acces.some(function(a) {
         return !a.nombre || !a.type || !a.championnat || !a.club;
       })) {
