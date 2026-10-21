@@ -561,6 +561,43 @@
   select, .custom-select-selected, .custom-select-option { cursor: pointer; }
   .custom-select-option:hover { background: #f2f2f2; }
 }
+
+   /* ===== Icônes des onglets ===== */
+.nav-link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.nav-link span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nav-icon {
+  display: block;
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* Très petits téléphones */
+@media (max-width: 360px) {
+  .nav-link { gap: 3px; }
+  .nav-icon { width: 12px; height: 12px; }
+}
+
+/* Ordinateur */
+@media (min-width: 1024px) {
+  .nav-link { gap: 10px; }
+  .nav-icon {
+    width: 28px;
+    height: 24px;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -570,9 +607,18 @@
       <img src="images/banniere.png" alt="Au Cœur des Tribunes" class="site-banner">
     </div>
     <nav class="site-nav" aria-label="Navigation principale">
-      <button type="button" class="nav-link active" data-nav="home" onclick="retourAccueil()">Accueil</button>
-      <button type="button" class="nav-link" data-nav="tickets" onclick="ouvrirDemandes()">Billets</button>
-      <button type="button" class="nav-link" data-nav="help" onclick="ouvrirAide()">Communauté</button>
+      <button type="button" class="nav-link active" data-nav="home" onclick="retourAccueil()">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+        <span>Accueil</span>
+      </button>
+      <button type="button" class="nav-link" data-nav="tickets" onclick="ouvrirDemandes()">
+        <img src="images/ticket.png" alt="" class="nav-icon">
+        <span>Billets</span>
+      </button>
+      <button type="button" class="nav-link" data-nav="help" onclick="ouvrirAide()">
+        <img src="images/communaute.png" alt="" class="nav-icon">
+        <span>Communauté</span>
+      </button>
     </nav>
   </header>
 
