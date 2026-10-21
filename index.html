@@ -356,7 +356,7 @@
     .home-option-copy strong { display:block; margin:0 0 7px; color:#171717; font-size:clamp(16px,4.2vw,20px); line-height:1.25; }
     .home-option-copy span { display:block; color:#505050; font-size:clamp(13px,3.4vw,15px); line-height:1.45; }
 
-    /* Apparence des formulaires harmonisée, sans changement de leur fonctionnement */
+    /* Apparence des formulaires harmonisée */
     .card:not(.home-card-wrap), .help-card, .recap-card { border:1px solid #dedede; border-radius:14px; background:rgba(255,255,255,.97); }
     .section-title, .help-section-title { color:#333; }
     button:not(.nav-link):not(.home-option) { background:#202020; color:#fff; }
@@ -441,21 +441,35 @@
 
   body { padding: 0 32px 56px; }
 
-  /* En-tête : bannière à gauche, menu à droite */
-  .site-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 32px;
-    margin: 0 -32px 44px;
-    padding: 12px max(32px, calc((100vw - 1100px) / 2));
+  /* Fond paysage pour ordinateur */
+  body::before {
+    background:
+      linear-gradient(rgba(20,20,20,.20), rgba(20,20,20,.30)),
+      url('images/stade-fond-paysage.jpeg') center center / cover no-repeat;
   }
-  .site-brand { width: auto; margin: 0; justify-content: flex-start; }
-  .site-brand .site-banner { width: auto; max-height: 64px; }
-  .site-nav { gap: 10px; justify-content: flex-end; }
+
+  /* En-tête : bannière centrée au-dessus, menu centré dessous */
+  .site-header {
+    display: block;
+    text-align: center;
+    margin: 0 -32px 44px;
+    padding: 16px 32px 14px;
+  }
+  .site-brand {
+    width: 100%;
+    margin: 0 auto 14px;
+    justify-content: center;
+  }
+  .site-brand .site-banner {
+    width: auto;
+    max-width: 480px;
+    height: auto;
+    max-height: 90px;
+  }
+  .site-nav { justify-content: center; gap: 12px; }
   .nav-link {
     flex: 0 0 auto;
-    padding: 11px 28px;
+    padding: 11px 38px;
     font-size: 15px;
     cursor: pointer;
   }
@@ -468,10 +482,7 @@
     margin: 0 auto 36px;
     font-size: 32px;
   }
-  .home-grid {
-    flex-direction: row !important;
-    gap: 28px;
-  }
+  .home-grid { flex-direction: row !important; gap: 28px; }
   .home-option {
     flex: 1;
     grid-template-columns: 1fr;
@@ -484,16 +495,11 @@
     text-align: center;
   }
   .home-option:hover { transform: translateY(-3px); }
-  .home-icon {
-    width: 160px;
-    max-width: none;
-    height: 120px;
-    margin: 0 auto;
-  }
+  .home-icon { width: 160px; max-width: none; height: 120px; margin: 0 auto; }
   .home-option-copy strong { font-size: 22px; }
   .home-option-copy span { font-size: 16px; }
 
-  /* Formulaires : cartes centrées, largeur confortable */
+  /* Cartes formulaires */
   .card:not(.home-card-wrap),
   .help-card,
   .recap-card {
@@ -501,24 +507,58 @@
     margin: 0 auto;
     padding: 44px 48px;
   }
-  #helpCard { max-width: 960px; }
+  #mainCard { max-width: 1020px; }
+  #helpCard { max-width: 1100px; }
 
   #mainCard h2,
   #helpCard h2 { font-size: 28px; }
   #mainCard .subtitle,
   #helpCard .help-explanation { font-size: 16px; }
 
-  /* Boutons d'envoi : taille raisonnable plutôt que pleine largeur */
+  /* --- Billets : Le match | Places + Contact --- */
+  .form-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    margin-top: 8px;
+  }
+  .form-col:first-child { padding-right: 48px; }
+  .form-col + .form-col {
+    padding-left: 48px;
+    border-left: 1px solid #e3e3e3;
+  }
+
+  /* --- Communauté : Contact | Accès billetterie --- */
+  .help-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    align-items: start;
+  }
+  .help-col-left {
+    padding-right: 40px;
+    position: sticky;
+    top: 150px;
+  }
+  .help-col-right {
+    padding-left: 40px;
+    border-left: 1px solid #e3e3e3;
+  }
+  .access-row { grid-template-columns: 1fr 1fr; }
+
+  /* Le séparateur en haut d'une colonne est inutile en 2 colonnes */
+  .form-col > .section-divider:first-child,
+  .help-col > .section-divider:first-child { display: none; }
+
+  /* Boutons d'envoi : taille raisonnable */
   #btnValider,
   #btnSubmitHelp { max-width: 340px; display: block; margin-left: auto; margin-right: auto; }
   .help-actions { justify-content: center; }
   .help-actions button { flex: 0 1 340px; width: auto; }
 
-  /* Un peu de confort à la souris */
+  /* Confort à la souris */
   select, .custom-select-selected, .custom-select-option { cursor: pointer; }
   .custom-select-option:hover { background: #f2f2f2; }
 }
-    
   </style>
 </head>
 <body>
@@ -568,6 +608,8 @@
       Remplis le formulaire ci-dessous pour faire ta demande.
     </p>
 
+    <div class="form-columns">
+    <div class="form-col">
     <label class="section-title">Le match</label>
 
     <label>Championnat</label>
@@ -612,6 +654,8 @@
       </div>
 
       <div class="info-club" id="infoClub"></div>
+      </div>
+      <div class="form-col">
     </div>
 
     <hr class="section-divider">
@@ -646,6 +690,8 @@
     <label>&#128172; Remarques ou pr&#233;cisions <span style="font-weight:normal;color:#aaa;">(facultatif)</span></label>
     <textarea id="remarques" placeholder="Ex : d&#233;placement d&#233;j&#224; pr&#233;vu, int&#233;r&#234;t pour d'autres matchs du m&#234;me week-end, tribune vis&#233;e..."></textarea>
 
+    </div>
+    </div>
     <button id="btnValider" onclick="valider()" disabled>Envoyer ma demande</button>
     <p style="text-align:center;font-size:12px;color:#888;margin-top:10px;">&#9888;&#65039; 3 demandes maximum par club</p>
 
@@ -681,15 +727,21 @@
     </div>
 
     <hr class="section-divider">
+    <div class="help-columns">
+    <div class="help-col help-col-left">
     <div class="help-section-title">Contact</div>
     <label for="helpInstagram">&#128248 Pseudo Instagram</label>
     <input type="text" id="helpInstagram" placeholder="@tonpseudo" oninput="checkHelpForm()">
+    </div>
+    <div class="help-col help-col-right">
 
     <hr class="section-divider">
     <div class="help-section-title">ACCES BILLETTERIE</div>
     <p style="font-size:13px;color:#666;line-height:1.5;">Tu peux proposer tes accès ci-dessous. Tu as la possibilité d'en ajouter plusieurs</p>
     <div id="accessRows"></div>
     <button type="button" class="add-access-btn" onclick="ajouterAcces()">+ Ajouter</button>
+    </div>
+    </div>
     <div id="helpError" style="display:none;margin-top:18px;padding:14px;background:#fce8e6;border-radius:6px;color:#c62828;text-align:center;"></div>
     <div class="help-actions">
       <button type="button" id="btnSubmitHelp" onclick="envoyerAcces()" disabled>Envoyer</button>
