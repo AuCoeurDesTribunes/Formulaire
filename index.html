@@ -597,7 +597,11 @@
     height: 24px;
   }
 }
-
+/* Communauté : textes centrés */
+#helpCard .help-note,
+#helpCard .help-col-right > p {
+  text-align: center;
+}
   </style>
 </head>
 <body>
@@ -612,8 +616,7 @@
         <span>Accueil</span>
       </button>
       <button type="button" class="nav-link" data-nav="tickets" onclick="ouvrirDemandes()">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9a2 2 0 0 0 0 6v3a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-3a2 2 0 0 1 0-6V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1z"/><path d="M14 5v2M14 11v2M14 17v2"/></svg>
-        <span>Billets</span>
+       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16a1 1 0 0 1 1 1v2.5a1.5 1.5 0 0 0 0 3V16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2.5a1.5 1.5 0 0 0 0-3V8a1 1 0 0 1 1-1z"/><path d="M9 7v10" stroke-dasharray="2 2.5"/></svg>
       </button>
       <button type="button" class="nav-link" data-nav="help" onclick="ouvrirAide()">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20v-1a5 5 0 0 1 5-5h2a5 5 0 0 1 5 5v1"/><circle cx="17.5" cy="9" r="2.5"/><path d="M17 14.2a4 4 0 0 1 4 3.8v1"/></svg>
@@ -625,7 +628,7 @@
 
   <div class="card home-card-wrap" id="homeCard">
     <div class="home-hero">
-    <p class="home-intro">Au C&#339;ur des Tribunes te souhaite la bienvenue ! Que souhaites-tu faire ?</p>
+    <p class="home-intro">Au C&#339;ur des Tribunes te souhaite la bienvenue ! <br>Que souhaites-tu faire ?</p>
     <div class="home-grid">
       <button type="button" class="home-option" onclick="ouvrirDemandes()">
         <img src="images/ticket.png" alt="Tribune de football" class="home-icon">
@@ -649,9 +652,9 @@
 
     <img src="https://lh3.googleusercontent.com/a/ACg8ocJ2hyWT-Cpq-XEg-oIX9msJIimG3dPKIvHyIYa7hZZb9P5cUGg=s360-c-no" alt="Au Coeur des Tribunes" class="logo">
 
-    <h2>Ma demande de billet</h2>
+    <h2>Ma demande de billets</h2>
     <p class="subtitle">
-      Vous avez un match en t&#234;te, un match de r&#234;ve ou envie de vivre une parent&#232;se football lors de votre prochain voyage ? 
+      Un match en t&#234;te, un match de r&#234;ve ou envie de vivre une parent&#232;se foot lors de votre prochain voyage ? <br>
       On a peut-&#234;tre ce qu'il vous faut !<br><br>
       Remplis le formulaire ci-dessous pour faire ta demande.
     </p>
@@ -771,7 +774,7 @@
       <p><strong>🤝 Partageons nos accès billetterie !</strong></p>
       <p>L’objectif est de mutualiser les memberships, abonnements et autres comptes dans la communauté afin de faciliter l’accès aux billetteries de clubs auxquels nous n’avons pas forcément accès par nos propres moyens.</p>
       <p>Si tu disposes d’un accès offrant des avantages en billetterie, n’hésite pas à le renseigner via ce formulaire !</p>
-      <p>🎟️ En contrepartie, tu pourras bénéficier d’une compensation financière et, selon les clubs, accumuler des points permettant d’accéder plus facilement aux matchs les plus demandés.</p>
+      <p>En contrepartie, tu pourras bénéficier d’une compensation financière et, selon les clubs, accumuler des points permettant d’accéder plus facilement aux matchs les plus demandés.</p>
       <p>Merci à tous ceux qui participeront à cette initiative !</p>
     </div>
 
@@ -786,7 +789,7 @@
 
     <hr class="section-divider">
     <div class="help-section-title">ACCES BILLETTERIE</div>
-    <p style="font-size:13px;color:#666;line-height:1.5;">Tu peux proposer tes accès ci-dessous. Tu as la possibilité d'en ajouter plusieurs</p>
+    <p style="font-size:13px;color:#666;line-height:1.5;">Tu peux proposer tes accès ci-dessous. <br> Tu as la possibilité d'en ajouter plusieurs.</p>
     <div id="accessRows"></div>
     <button type="button" class="add-access-btn" onclick="ajouterAcces()">+ Ajouter</button>
     </div>
