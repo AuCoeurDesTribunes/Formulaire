@@ -728,7 +728,6 @@
           <label>Les places doivent-elles &#234;tre c&#244;te &#224; c&#244;te ?</label>
           <div class="radio-group">
             <label><input type="radio" name="coteCote" value="Oui"> Oui</label>
-            <label><input type="radio" name="coteCote" value="Non"> Non</label>
             <label><input type="radio" name="coteCote" value="Peu importe" checked> Peu importe</label>
           </div>
         </div>
@@ -751,7 +750,7 @@
     <div id="erreur"></div>
 
     <div class="info-bottom">
-      Les demandes sont trait&#233;es par ordre chronologique. Nous vous recontactons uniquement lorsque nous avons des billets correspondant &#224; vos crit&#232;res. L'absence de r&#233;ponse ne signifie pas un refus d&#233;finitif : les disponibilit&#233;s &#233;voluent parfois jusqu'aux derniers jours avant le match.
+      Les demandes sont trait&#233;es par ordre chronologique. Nous prenons contact uniquement lorsque nous avons une disponibilit&#233; correspondant &#224; vos crit&#232;res. L'absence de r&#233;ponse ne signifie pas un refus d&#233;finitif : les disponibilit&#233;s &#233;voluent parfois jusqu'au match.
     </div>
 
   </div>
@@ -945,10 +944,38 @@
     opt.textContent = 'Journ\u00e9e ' + i;
     selJ.appendChild(opt);
   }
-  selJ.disabled = false;
+ selJ.disabled = false;
 
-  selM.innerHTML = '<option value="">-- Choisir un match --</option>';
-  selM.disabled = true;
+// Récupération des dates correspondant à chaque journée
+callScript('getDatesJournees', { championnat: champ }).then(function(datesParJournee) {
+
+  // Vérifie que le championnat sélectionné n'a pas changé entre-temps
+  if (document.getElementById('championnat').value !== champ) return;
+
+  Array.from(selJ.options).forEach(function(opt) {
+    if (!opt.value) return;
+
+    const dates = datesParJournee && datesParJournee[opt.value];
+
+    if (dates && dates.length > 0) {
+      let dateLabel = '';
+
+      if (dates.length === 1) {
+        dateLabel = dates[0];
+      } else {
+        dateLabel = 'du ' + dates[0] + ' au ' + dates[dates.length - 1];
+      }
+
+      opt.textContent = opt.value.replace('J', 'Journée ') + ' – ' + dateLabel;
+    }
+  });
+
+}).catch(function(error) {
+  console.log('Impossible de récupérer les dates des journées :', error);
+});
+
+selM.innerHTML = '<option value="">-- Choisir un match --</option>';
+selM.disabled = true;
 }
 
 function loadMatchs() {
@@ -984,10 +1011,9 @@ function loadMatchs() {
     if (matchs && Array.isArray(matchs) && matchs.length > 0) {
       matchs.forEach(function(m) {
         const opt = document.createElement('option');
-        opt.value = m.domicile + ' vs ' + m.exterieur;
-        opt.dataset.date = m.dateISO || '';
-        const dateStr = m.date ? ' \u2014 ' + new Date(m.date).toLocaleDateString('fr-FR') : '';
-        opt.textContent = m.domicile + ' vs ' + m.exterieur + dateStr;
+       opt.value = m.domicile + ' vs ' + m.exterieur;
+opt.dataset.date = m.dateISO || '';
+opt.textContent = m.domicile + ' vs ' + m.exterieur;
         selM.appendChild(opt);
       });
       selM.disabled = false;
@@ -1143,13 +1169,17 @@ function loadMatchs() {
         }
       }).then(function(id) {
         document.getElementById('mainCard').style.display = 'none';
-        document.getElementById('recapContenu').innerHTML =
-          '&#9989; Ta demande a bien &#233;t&#233; re&#231;ue !<br>'
-          + '<small style="color:#888;">R&#233;f&#233;rence : <strong>' + id + '</strong></small><br><br>'
-          + '<strong>' + champ + ' &#8212; ' + journeeLabel + '</strong><br>'
-          + '&#9917; ' + matchLabel + '<br>'
-          + '&#127915; ' + nb + ' place(s)' + (coteCote !== 'N/A' ? ' &#8212; C&#244;te &#224; c&#244;te : ' + coteCote : '') + '<br>'
-          + '&#128248; ' + insta;
+document.getElementById('recapContenu').innerHTML =
+  '&#9989; Ta demande a bien été reçue !<br>'
+  + '<small style="color:#888;">Référence : <strong>' + id + '</strong></small><br><br>'
+  + '<strong>' + champ + ' — ' + journeeLabel + '</strong><br>'
+  + '&#9917; ' + matchLabel + '<br>'
+  + '&#127915; ' + nb + ' place(s)' + (coteCote !== 'N/A' ? ' — Côte à côte : ' + coteCote : '') + '<br>'
+  + '&#128248; ' + insta
+  + '<br><br><hr style="border:0;border-top:1px solid #ddd;margin:15px 0;">'
+  + '<div style="font-size:13px;color:#777;line-height:1.6;">'
+  + 'Les demandes sont traitées par ordre chronologique. Nous prenons contact uniquement lorsque nous avons une disponibilité correspondant à vos critères. L’absence de réponse ne signifie pas un refus définitif : les disponibilités évoluent parfois jusqu’au match.'
+  + '</div>';
         document.getElementById('recapCard').style.display = 'block';
         btn.textContent = 'Envoyer ma demande';
         btn.disabled = false;
