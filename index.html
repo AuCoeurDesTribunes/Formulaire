@@ -684,9 +684,28 @@
 
   .journee-option {
     padding: 13px 9px;
-    font-size: 12px;
+    font-size: 15px;
   }
+
+  /* Priorité d'affichage des listes déroulantes */
+#customChampionnat {
+  position: relative;
+  z-index: 300;
 }
+
+#customJournee {
+  position: relative;
+  z-index: 100;
+}
+
+#customChampionnat .custom-select-options {
+  z-index: 301;
+}
+
+#customJournee .journee-options {
+  z-index: 101;
+}
+ }
     
   </style>
 </head>
@@ -965,28 +984,22 @@
       options.appendChild(divAutre);
     })();
 
-    function toggleDropdown() {
-      const opts = document.getElementById('customOptions');
-      opts.style.display = opts.style.display === 'none' ? 'block' : 'none';
-    }
+function toggleDropdown() {
+  const opts = document.getElementById('customOptions');
+  const container = document.getElementById('customChampionnat');
+  const ouverture = opts.style.display === 'none';
+
+  opts.style.display = ouverture ? 'block' : 'none';
+  container.style.zIndex = ouverture ? '300' : '1';
+}
 
 document.addEventListener('click', function(e) {
+  const container = document.getElementById('customChampionnat');
 
-  const containerChamp = document.getElementById('customChampionnat');
-  const optionsChamp = document.getElementById('customOptions');
-
-  if (!containerChamp.contains(e.target)) {
-    optionsChamp.style.display = 'none';
+  if (!container.contains(e.target)) {
+    document.getElementById('customOptions').style.display = 'none';
+    container.style.zIndex = '1';
   }
-
-  const containerJournee = document.getElementById('customJournee');
-  const optionsJournee = document.getElementById('journeeOptions');
-
-  if (!containerJournee.contains(e.target)) {
-    optionsJournee.style.display = 'none';
-    document.getElementById('selectedJournee').setAttribute('aria-expanded', 'false');
-  }
-
 });
 
     function selectChampionnat(value, label) {
