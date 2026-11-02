@@ -687,23 +687,28 @@
     font-size: 15px;
   }
 
-  /* Priorité d'affichage des listes déroulantes */
+/* Hiérarchie des trois menus */
 #customChampionnat {
-  position: relative;
   z-index: 300;
 }
 
 #customJournee {
+  z-index: 200;
+}
+
+#customMatch {
   position: relative;
   z-index: 100;
 }
 
-#customChampionnat .custom-select-options {
-  z-index: 301;
+/* Même apparence pour les trois listes */
+#matchOptions {
+  max-height: 300px;
+  overflow-y: auto;
 }
 
-#customJournee .journee-options {
-  z-index: 101;
+#matchOptions .custom-select-option {
+  font-size: 15px;
 }
  }
     
@@ -829,10 +834,19 @@
   <option value="">-- Choisir une journée --</option>
 </select>
 
-          <label>Match</label>
-          <select id="match" onchange="onMatchChange()" disabled>
-            <option value="">-- Choisir un match --</option>
-          </select>
+<div class="custom-select" id="customMatch">
+  <div class="custom-select-selected" id="selectedMatch"
+       onclick="toggleMatchDropdown()">
+    <span id="selectedMatchText">-- Choisir un match --</span>
+    <span class="arrow">&#9660;</span>
+  </div>
+
+  <div class="custom-select-options" id="matchOptions" style="display:none;"></div>
+</div>
+
+<select id="match" onchange="onMatchChange()" disabled style="display:none;">
+  <option value="">-- Choisir un match --</option>
+</select>
 
           <div class="info-date">
             &#128197; Les dates affich&#233;es sont th&#233;oriques. Veuillez vous r&#233;f&#233;rer aux programmations officielles ou nous contacter sur Instagram pour plus d'informations.
@@ -994,12 +1008,25 @@ function toggleDropdown() {
 }
 
 document.addEventListener('click', function(e) {
-  const container = document.getElementById('customChampionnat');
 
-  if (!container.contains(e.target)) {
+  // Fermeture du menu Championnat
+  const championnatContainer = document.getElementById('customChampionnat');
+  if (!championnatContainer.contains(e.target)) {
     document.getElementById('customOptions').style.display = 'none';
-    container.style.zIndex = '1';
   }
+
+  // Fermeture du menu Journée
+  const journeeContainer = document.getElementById('customJournee');
+  if (!journeeContainer.contains(e.target)) {
+    document.getElementById('journeeOptions').style.display = 'none';
+  }
+
+  // Fermeture du menu Match
+  const matchContainer = document.getElementById('customMatch');
+  if (!matchContainer.contains(e.target)) {
+    document.getElementById('matchOptions').style.display = 'none';
+  }
+
 });
 
     function selectChampionnat(value, label) {
@@ -1182,6 +1209,59 @@ function loadJournees() {
   selected.setAttribute('aria-expanded', String(ouverture));
 }
 
+    function toggleMatchDropdown() {
+  const opts = document.getElementById('matchOptions');
+  const select = document.getElementById('selectedMatch');
+
+  if (select.style.opacity === '0.5') return;
+
+  const ouverture = opts.style.display === 'none';
+  opts.style.display = ouverture ? 'block' : 'none';
+}
+
+function selectMatch(valeur, label) {
+  const selM = document.getElementById('match');
+
+  selM.value = valeur;
+  document.getElementById('selectedMatchText').textContent = label;
+  document.getElementById('matchOptions').style.display = 'none';
+
+  onMatchChange();
+}
+
+function actualiserListeMatchs() {
+  const selM = document.getElementById('match');
+  const options = document.getElementById('matchOptions');
+  const texte = document.getElementById('selectedMatchText');
+  const select = document.getElementById('selectedMatch');
+
+  options.innerHTML = '';
+  texte.textContent = '-- Choisir un match --';
+
+  if (selM.disabled) {
+    select.style.opacity = '0.5';
+    select.style.cursor = 'not-allowed';
+    return;
+  }
+
+  select.style.opacity = '1';
+  select.style.cursor = 'pointer';
+
+  Array.from(selM.options).forEach(function(opt) {
+    if (!opt.value) return;
+
+    const div = document.createElement('div');
+    div.className = 'custom-select-option';
+    div.textContent = opt.textContent;
+
+    div.onclick = function() {
+      selectMatch(opt.value, opt.textContent);
+    };
+
+    options.appendChild(div);
+  });
+}
+
 function selectJournee(valeur, label) {
   const selJ = document.getElementById('journee');
 
@@ -1247,7 +1327,8 @@ opt.textContent = m.domicile + ' vs ' + m.exterieur;
       selM.disabled = false;
     } else {
       selM.innerHTML = '<option value="">Aucun match trouv\u00e9</option>';
-    }
+    } 
+    actualiserListeMatchs();
     checkForm();
   }).catch(function() {
     clearTimeout(timeout);
@@ -1257,6 +1338,7 @@ opt.textContent = m.domicile + ' vs ' + m.exterieur;
       selM.removeEventListener('click', retryLoad);
       loadMatchs();
     }, { once: true });
+    actualiserListeMatchs();
   });
 }
 
