@@ -607,6 +607,87 @@
 #helpCard .help-col-right > p {
   text-align: center;
 }
+
+    /* ===== Menu personnalisé des journées ===== */
+
+#customJournee {
+  position: relative;
+  width: 100%;
+  margin-top: 8px;
+  z-index: 110;
+}
+
+#selectedJournee {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 0;
+  box-sizing: border-box;
+}
+
+#selectedJourneeText {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.journee-options {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-height: min(45vh, 340px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  background: #fff;
+  border: 1px solid #d5d5d5;
+  border-radius: 8px;
+  box-shadow: 0 5px 16px rgba(0,0,0,.16);
+  z-index: 200;
+}
+
+.journee-option {
+  display: block;
+  width: 100%;
+  padding: 12px 10px;
+  border: none;
+  border-bottom: 1px solid #eee;
+  border-radius: 0;
+  margin: 0;
+  background: #fff;
+  color: #202020;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.journee-option:hover,
+.journee-option:focus {
+  background: #f1f1f1;
+  outline: none;
+}
+
+.journee-option:last-child {
+  border-bottom: none;
+}
+
+/* Adaptation téléphone */
+@media (max-width: 650px) {
+  .journee-options {
+    max-height: 45vh;
+  }
+
+  .journee-option {
+    padding: 13px 9px;
+    font-size: 12px;
+  }
+}
+    
   </style>
 </head>
 <body>
@@ -697,10 +778,37 @@
         </div>
 
         <div id="sectionJournee">
-          <label>Journ&#233;e</label>
-          <select id="journee" onchange="loadMatchs()" disabled>
-            <option value="">-- Choisir une journ&#233;e --</option>
-          </select>
+<label>Journée</label>
+
+<div class="custom-select" id="customJournee">
+  <div
+    class="custom-select-selected"
+    id="selectedJournee"
+    role="button"
+    tabindex="0"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    onclick="toggleJourneeDropdown()"
+    onkeydown="gererClavierJournee(event)"
+  >
+    <span id="selectedJourneeText">
+      -- Choisir une journée --
+    </span>
+    <span class="arrow">&#9660;</span>
+  </div>
+
+  <div
+    class="custom-select-options journee-options"
+    id="journeeOptions"
+    role="listbox"
+    style="display:none;"
+  ></div>
+</div>
+
+<!-- Sélecteur conservé pour assurer la compatibilité avec le reste du formulaire -->
+<select id="journee" disabled style="display:none;">
+  <option value="">-- Choisir une journée --</option>
+</select>
 
           <label>Match</label>
           <select id="match" onchange="onMatchChange()" disabled>
@@ -820,6 +928,8 @@
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwcomK1ioa_1LVeGKOevsQ9__fVvGwYUJ8uY76-NIwIsJRmdXzM9zh18wrTK0AMKD-/exec';
 
+    let journeesRequestId = 0;    
+  
     const MESSAGES_CLUBS = {
       'Manchester United': '&#128241; Bon &#224; savoir : pour ce match, le transfert de billets n&#233;cessite un appareil Android. Merci de le pr&#233;ciser si cela pose un probl&#232;me.',
     };
@@ -860,12 +970,24 @@
       opts.style.display = opts.style.display === 'none' ? 'block' : 'none';
     }
 
-    document.addEventListener('click', function(e) {
-      const container = document.getElementById('customChampionnat');
-      if (!container.contains(e.target)) {
-        document.getElementById('customOptions').style.display = 'none';
-      }
-    });
+document.addEventListener('click', function(e) {
+
+  const containerChamp = document.getElementById('customChampionnat');
+  const optionsChamp = document.getElementById('customOptions');
+
+  if (!containerChamp.contains(e.target)) {
+    optionsChamp.style.display = 'none';
+  }
+
+  const containerJournee = document.getElementById('customJournee');
+  const optionsJournee = document.getElementById('journeeOptions');
+
+  if (!containerJournee.contains(e.target)) {
+    optionsJournee.style.display = 'none';
+    document.getElementById('selectedJournee').setAttribute('aria-expanded', 'false');
+  }
+
+});
 
     function selectChampionnat(value, label) {
       document.getElementById('championnat').value = value;
@@ -907,7 +1029,7 @@
       input.value = v;
     }
 
-    function loadJournees() {
+function loadJournees() {
   const champ = document.getElementById('championnat').value;
   const selJ = document.getElementById('journee');
   const selM = document.getElementById('match');
@@ -915,8 +1037,24 @@
   const champAutre = document.getElementById('champAutre');
   const infoClub = document.getElementById('infoClub');
 
+  const options = document.getElementById('journeeOptions');
+  const selectedText = document.getElementById('selectedJourneeText');
+  const selected = document.getElementById('selectedJournee');
+
+  const requestId = ++journeesRequestId;
+
   infoClub.style.display = 'none';
   infoClub.innerHTML = '';
+
+  selJ.innerHTML = '<option value="">-- Choisir une journée --</option>';
+  selJ.disabled = true;
+
+  selM.innerHTML = '<option value="">-- Choisir un match --</option>';
+  selM.disabled = true;
+
+  options.innerHTML = '';
+  options.style.display = 'none';
+  selected.setAttribute('aria-expanded', 'false');
 
   if (champ === 'Autre') {
     sectionJournee.style.display = 'none';
@@ -927,60 +1065,132 @@
 
   sectionJournee.style.display = 'block';
   champAutre.style.display = 'none';
-  checkForm();
 
-  // Nombre de journées selon le championnat
+  selectedText.textContent = 'Chargement des journées...';
+
   const nbJournees = {
-  'Premier League': 38,
-  'Serie A': 38,
-  'Liga': 38,
-  'Ligue 1': 34,
-  'Bundesliga': 34,
-  'Ligue des Champions': 8
-};
-
+    'Premier League': 38,
+    'Serie A': 38,
+    'Liga': 38,
+    'Ligue 1': 34,
+    'Bundesliga': 34,
+    'Ligue des Champions': 8
+  };
 
   const nb = nbJournees[champ] || 38;
 
-  selJ.innerHTML = '<option value="">-- Choisir une journ\u00e9e --</option>';
-  for (var i = 1; i <= nb; i++) {
-    const opt = document.createElement('option');
-    opt.value = 'J' + i;
-    opt.textContent = 'Journ\u00e9e ' + i;
-    selJ.appendChild(opt);
-  }
- selJ.disabled = false;
+  callScript('getDatesJournees', {
+    championnat: champ
+  }).then(function(datesParJournee) {
 
-// Récupération des dates correspondant à chaque journée
-callScript('getDatesJournees', { championnat: champ }).then(function(datesParJournee) {
+    // Ignore les réponses concernant un ancien championnat
+    if (
+      requestId !== journeesRequestId ||
+      document.getElementById('championnat').value !== champ
+    ) return;
 
-  // Vérifie que le championnat sélectionné n'a pas changé entre-temps
-  if (document.getElementById('championnat').value !== champ) return;
+    // Vérification de la réponse Apps Script
+    if (
+      !datesParJournee ||
+      datesParJournee.status === 'error' ||
+      typeof datesParJournee !== 'object'
+    ) {
+      throw new Error('Impossible de récupérer les dates.');
+    }
 
-  Array.from(selJ.options).forEach(function(opt) {
-    if (!opt.value) return;
+    for (let i = 1; i <= nb; i++) {
+      const valeur = 'J' + i;
+      const dates = datesParJournee[valeur] || [];
 
-    const dates = datesParJournee && datesParJournee[opt.value];
-
-    if (dates && dates.length > 0) {
-      let dateLabel = '';
+      let dateLabel = 'Date à confirmer';
 
       if (dates.length === 1) {
         dateLabel = dates[0];
-      } else {
-        dateLabel = 'du ' + dates[0] + ' au ' + dates[dates.length - 1];
+      } else if (dates.length > 1) {
+        dateLabel = dates[0] + ' – ' + dates[dates.length - 1];
       }
 
-      opt.textContent = opt.value.replace('J', 'Journée ') + ' – ' + dateLabel;
+      const label = 'Journée ' + i + ' – ' + dateLabel;
+
+      // Mise à jour du select conservé en arrière-plan
+      const opt = document.createElement('option');
+      opt.value = valeur;
+      opt.textContent = label;
+      selJ.appendChild(opt);
+
+      // Création de l'option visible
+      const div = document.createElement('div');
+      div.className = 'journee-option';
+      div.textContent = label;
+      div.setAttribute('role', 'option');
+      div.setAttribute('tabindex', '0');
+
+      div.onclick = function() {
+        selectJournee(valeur, label);
+      };
+
+      div.onkeydown = function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          selectJournee(valeur, label);
+        }
+      };
+
+      options.appendChild(div);
     }
+
+    // Le menu n'est disponible qu'une fois les dates récupérées
+    selectedText.textContent = '-- Choisir une journée --';
+    selJ.disabled = false;
+
+    checkForm();
+
+  }).catch(function(error) {
+
+    if (requestId !== journeesRequestId) return;
+
+    console.error('Erreur chargement journées :', error);
+
+    selectedText.textContent = 'Erreur de chargement – Réessayer';
+    options.innerHTML = '';
   });
+}
 
-}).catch(function(error) {
-  console.log('Impossible de récupérer les dates des journées :', error);
-});
+    function toggleJourneeDropdown() {
+  const selJ = document.getElementById('journee');
+  const options = document.getElementById('journeeOptions');
+  const selected = document.getElementById('selectedJournee');
 
-selM.innerHTML = '<option value="">-- Choisir un match --</option>';
-selM.disabled = true;
+  if (selJ.disabled) return;
+
+  const ouverture = options.style.display === 'none';
+
+  options.style.display = ouverture ? 'block' : 'none';
+  selected.setAttribute('aria-expanded', String(ouverture));
+}
+
+function selectJournee(valeur, label) {
+  const selJ = document.getElementById('journee');
+
+  selJ.value = valeur;
+
+  document.getElementById('selectedJourneeText').textContent = label;
+  document.getElementById('journeeOptions').style.display = 'none';
+  document.getElementById('selectedJournee').setAttribute('aria-expanded', 'false');
+
+  loadMatchs();
+}
+
+function gererClavierJournee(e) {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    toggleJourneeDropdown();
+  }
+
+  if (e.key === 'Escape') {
+    document.getElementById('journeeOptions').style.display = 'none';
+    document.getElementById('selectedJournee').setAttribute('aria-expanded', 'false');
+  }
 }
 
 function loadMatchs() {
@@ -1110,6 +1320,12 @@ opt.textContent = m.domicile + ' vs ' + m.exterieur;
       document.getElementById('btnValider').disabled = true;
       document.getElementById('erreur').style.display = 'none';
       window.scrollTo(0, 0);
+      document.getElementById('selectedJourneeText').textContent =
+  '-- Choisir une journée --';
+document.getElementById('journeeOptions').innerHTML = '';
+document.getElementById('journeeOptions').style.display = 'none';
+document.getElementById('selectedJournee').setAttribute('aria-expanded', 'false');
+journeesRequestId++;
     }
 
     function valider() {
