@@ -962,7 +962,8 @@
 
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwcomK1ioa_1LVeGKOevsQ9__fVvGwYUJ8uY76-NIwIsJRmdXzM9zh18wrTK0AMKD-/exec';
-
+    const SCRIPT_URL_COMMUNAUTE = https://script.google.com/macros/s/AKfycbzTejz0K-9qsJl0XPhXMCDgid4MUjCkQ_p40os_5ppTWjWUAVmdgLiOIMhExAdDRo5V/exec
+    
     let journeesRequestId = 0;    
   
     const MESSAGES_CLUBS = {
@@ -1038,25 +1039,30 @@ document.addEventListener('click', function(e) {
       loadJournees();
     }
 
-    function callScript(action, params, tentative) {
+function callScript(action, params, tentative, scriptUrl) {
   tentative = tentative || 1;
-  return fetch(SCRIPT_URL, {
+
+  // Par défaut, on utilise l'ancien Apps Script
+  // sauf si une URL spécifique est fournie.
+  scriptUrl = scriptUrl || SCRIPT_URL;
+
+  return fetch(scriptUrl, {
     method: 'POST',
     body: JSON.stringify(Object.assign({ action: action }, params))
   }).then(function(r) {
-    return r.text(); // on lit en texte d'abord
+    return r.text();
   }).then(function(text) {
     try {
-      return JSON.parse(text); // puis on parse
+      return JSON.parse(text);
     } catch(e) {
       console.log('Réponse brute : ' + text);
-      return text; // si pas du JSON valide on retourne le texte
+      return text;
     }
   }).catch(function(err) {
     if (tentative < 3) {
       return new Promise(function(resolve) {
         setTimeout(function() {
-          resolve(callScript(action, params, tentative + 1));
+          resolve(callScript(action, params, tentative + 1, scriptUrl));
         }, 2000);
       });
     }
@@ -1715,7 +1721,7 @@ document.getElementById('recapContenu').innerHTML =
 
       callScript('enregistrerMemberships', {
         data: { instagram: insta, acces: acces }
-      }).then(function(result) {
+      }, 1, SCRIPT_URL_COMMUNAUTE).then(function(result) {
         if (!result || result.status !== 'ok') throw new Error('Réponse inattendue du serveur');
         masquerToutesLesPages();
         document.getElementById('helpRecapCard').style.display = 'block';
