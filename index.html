@@ -1496,13 +1496,16 @@ journeesRequestId++;
 document.getElementById('recapContenu').innerHTML =
   '&#9989; Ta demande a bien été reçue !<br>'
   + '<small style="color:#888;">Référence : <strong>' + id + '</strong></small><br><br>'
-  + '<strong>' + champ + ' — ' + journeeLabel + '</strong><br>'
+  + '<strong>' Détails de ta demande '</strong><br>'
+  + ' + champ + ' — ' + journeeLabel + '<br>'
   + '&#9917; ' + matchLabel + '<br>'
   + '&#127915; ' + nb + ' place(s)' + (coteCote !== 'N/A' ? ' — Côte à côte : ' + coteCote : '') + '<br>'
   + '&#128248; ' + insta
   + '<br><br><hr style="border:0;border-top:1px solid #ddd;margin:15px 0;">'
   + '<div style="font-size:13px;color:#777;line-height:1.6;">'
-  + 'Les demandes sont traitées par ordre chronologique. Nous prenons contact uniquement lorsque nous avons une disponibilité correspondant à vos critères. L’absence de réponse ne signifie pas un refus définitif : les disponibilités évoluent parfois jusqu’au match.'
+  + 'Pense à garder tes DM ouverts et à suivre notre page Instagram pour que nous puissions te recontacter.'<br>'
+  + 'Les demandes sont traitées par ordre chronologique. Nous te contacterons uniquement lorsqu'une disponibilité se présentera. Des places peuvent se libérer jusqu'à l'approche du match !'<br>'
+  + 'Pour toute question sur le suivi de ta demande, n'hésite pas à nous contacter sur Instagram.'
   + '</div>';
         document.getElementById('recapCard').style.display = 'block';
         btn.textContent = 'Envoyer ma demande';
