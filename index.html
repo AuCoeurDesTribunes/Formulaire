@@ -1149,7 +1149,10 @@ function loadJournees() {
     for (let i = 1; i <= nb; i++) {
       const valeur = 'J' + i;
       const dates = datesParJournee[valeur] || [];
-
+    
+      // Ignore les journées sans date (journées entièrement passées)
+      if (dates.length === 0) continue;
+    
       let dateLabel = 'Date à confirmer';
 
       if (dates.length === 1) {
